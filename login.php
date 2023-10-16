@@ -1,3 +1,6 @@
+<?php
+require 'function.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
       
@@ -14,12 +17,7 @@
        <div class="box">
         <div class="header">
             <header><img src="images/logo.png" alt=""></header>
-            <p>Sign up to Gear Arena</p>
-        </div>
-        <div class="input-box">
-            <label for="username">Username</label>
-            <input type="username" class="input-field" id="username" required>
-            <i class="bx bx-envelope"></i>
+            <p>Log In to Gear Arena</p>
         </div>
         <div class="input-box">
             <label for="email">Email</label>
@@ -32,10 +30,10 @@
             <i class="bx bx-lock"></i>
         </div>
         <div class="input-box">
-            <input type="submit" class="input-submit" value="SIGN UP">
+            <input type="submit" class="input-submit" value="SIGN IN">
         </div>
         <div class="bottom">
-            <span><a href="#">Sign in</a></span>
+            <span><a href="#">Sign Up</a></span>
             <span><a href="#">Forgot Password?</a></span>
         </div>
         
