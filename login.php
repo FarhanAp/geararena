@@ -1,5 +1,10 @@
 <?php
 require 'function.php';
+
+if(isset($_GET['user']))
+{
+    echo "<script>alert('wrong email or password')</script>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,19 +24,21 @@ require 'function.php';
             <header><img src="images/logo.png" alt=""></header>
             <p>Log In to Gear Arena</p>
         </div>
-        <div class="input-box">
-            <label for="email">Email</label>
-            <input type="email" class="input-field" id="email" required>
-            <i class="bx bx-envelope"></i>
-        </div>
-        <div class="input-box">
-            <label for="pass">Password</label>
-            <input type="password" class="input-field" id="pass" required>
-            <i class="bx bx-lock"></i>
-        </div>
-        <div class="input-box">
-            <input type="submit" class="input-submit" value="SIGN IN">
-        </div>
+        <form action="function.php" method="POST">
+            <div class="input-box">
+                <label for="email">Email</label>
+                <input type="email" class="input-field" name="email" required>
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <label for="pass">Password</label>
+                <input type="password" class="input-field" name="pass" required>
+                <i class="bx bx-lock"></i>
+            </div>
+            <div class="input-box">
+                <input type="submit" class="input-submit" value="LOG IN" name="login">
+            </div>
+        </form>
         <div class="bottom">
             <span><a href="#">Sign Up</a></span>
             <span><a href="#">Forgot Password?</a></span>

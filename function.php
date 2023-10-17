@@ -48,6 +48,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["signup"])) {
                 echo "<span style='color:red'>password doesn't match </span>";
             }
         }
+    } 
+}
+
+// handle login
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["login"])) {
+
+    $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+    $password = mysqli_real_escape_string($connect, $_POST["pass"]);
+
+    // query the email to see if there is a user
+    $sql = "SELECT * FROM users WHERE email='$email' limit 1";
+    $query = mysqli_query($connect, $sql);
+    $data = mysqli_fetch_assoc($query);
+
+    if (mysqli_num_rows($query) == 1) {
+        if (password_verify($password, $data['password'])) {
+            $_SESSION["id"] = $data["id"];
+            $_SESSION['username'] = $data["username"];
+            header("Location: index.php");
+        } else {
+            header("Location: login.php?user=notFound");
+        }
     }
-    
 }
