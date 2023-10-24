@@ -41,7 +41,6 @@ if(isset($_GET['user']))
         </form>
         <div class="bottom">
             <span><a href="register.php">Sign Up</a></span>
-            <span><a href="#">Forgot Password?</a></span>
         </div>
         
        </div>
