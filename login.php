@@ -40,7 +40,7 @@ if(isset($_GET['user']))
             </div>
         </form>
         <div class="bottom">
-            <span><a href="#">Sign Up</a></span>
+            <span><a href="register.php">Sign Up</a></span>
             <span><a href="#">Forgot Password?</a></span>
         </div>
         

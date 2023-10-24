@@ -45,8 +45,7 @@ require 'function.php';
             </div>
         </form>
         <div class="bottom">
-            <span><a href="#">Sign in</a></span>
-            <span><a href="#">Forgot Password?</a></span>
+            <span><a href="login.php">Sign in</a></span>
         </div>
         
        </div>
