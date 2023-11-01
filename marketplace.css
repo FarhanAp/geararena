@@ -153,7 +153,7 @@ body {
 
 #feature .fe-box{
     width: 180px;
-    test-align: center;
+    text-align: center;
     padding: 25px 15px;
     box-shadow: 20px 20px 34px rgba(0, 0, 0, 0.03);
     border: 1px solid #cce7d0;
@@ -208,6 +208,15 @@ body {
     justify-content: space-between;
     padding-top: 20px;
     flex-wrap: wrap;
+}
+
+.products-wrapper{
+    height: 18vw;
+}
+
+.products-wrapper img{
+    max-width: 100%;
+    max-height: 100%;
 }
 
 #product1 .pro {
