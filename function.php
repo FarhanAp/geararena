@@ -85,9 +85,34 @@ function loadForumCategory(){
 
         echo "
         <tr>
-            <td> <a href=\"forumpost.php?id=$cId\">$cId</a> </td>
+            <td> <a href=\"forumpost.php?cid=$cId\">$cId</a> </td>
             <td> <a href='forumpost.php?id=$cId'>$cName</a> </td>
         </tr>
         ";
     }
+}
+
+//handle forum post
+function loadForumPost(){
+    $caId = $_GET["cid"];
+    $con = opencon();
+    $sql = "SELECT * FROM forum_posts WHERE category_id= '$caId' ORDER BY id DESC";
+    $query = mysqli_query($con, $sql);
+
+
+    if(mysqli_num_rows($query) > 0){
+        while($data = mysqli_fetch_assoc($query)){
+            echo "
+            <tr>
+                <td> X </td>
+                <td> XX </td>
+            </tr>
+            ";
+        }
+    } else {
+        echo "<script>alert('no post found in this category')</script>";
+        echo "<h1>no post found in this category</h1>";
+        
+    }
+
 }
