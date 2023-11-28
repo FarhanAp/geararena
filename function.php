@@ -86,7 +86,7 @@ function loadForumCategory(){
         echo "
         <tr>
             <td> <a href=\"forumpost.php?cid=$cId\">$cId</a> </td>
-            <td> <a href='forumpost.php?id=$cId'>$cName</a> </td>
+            <td> <a href='forumpost.php?cid=$cId'>$cName</a> </td>
         </tr>
         ";
     }
