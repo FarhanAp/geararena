@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Forum post page</title>
 </head>
 <body>
-    <P>this is a test page</P>
+    <h1>this is a forum post page</h1>
 </body>
 </html>

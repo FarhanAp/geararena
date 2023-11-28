@@ -16,9 +16,9 @@
 
         <div>
             <ul id="navbar">
-                <li><a class="active" href="marketplace.html">Home</a></li>
+                <li><a class="active" href="marketplace.php">Home</a></li>
                 <li><a href="shop.html">Shop</a></li>
-                <li><a href="forum.html">Forum</a></li>
+                <li><a href="forum.php">Forum</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
@@ -210,8 +210,6 @@
                 <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
             </div>
         </div>
-        
-        
     </section>
 
     <section id="banner" class="section-m1"> 

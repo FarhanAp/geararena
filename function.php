@@ -72,3 +72,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["login"])) {
         }
     }
 }
+
+// handle forum category
+function loadForumCategory(){
+    $con = opencon();
+    $sql = "SELECT * FROM forum_category ORDER BY id DESC";
+    $query = mysqli_query($con, $sql);
+
+    while($data = mysqli_fetch_assoc($query)){
+        $cId = $data["id"];
+        $cName = $data["name"];
+
+        echo "
+        <tr>
+            <td> <a href=\"forumpost.php?id=$cId\">$cId</a> </td>
+            <td> <a href='forumpost.php?id=$cId'>$cName</a> </td>
+        </tr>
+        ";
+    }
+}
