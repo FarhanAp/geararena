@@ -99,7 +99,6 @@ function loadForumPost(){
     $sql = "SELECT * FROM forum_posts WHERE category_id= '$caId' ORDER BY id DESC";
     $query = mysqli_query($con, $sql);
 
-
     if(mysqli_num_rows($query) > 0){
         while($data = mysqli_fetch_assoc($query)){
             echo "
@@ -110,9 +109,64 @@ function loadForumPost(){
             ";
         }
     } else {
-        echo "<script>alert('no post found in this category')</script>";
-        echo "<h1>no post found in this category</h1>";
-        
+        // echo "<script>alert('no post found in this category')</script>";
+        echo "<h1>no post found in this category</h1>";   
     }
+}
 
+
+//handle the button
+function postCreation(){
+    $con = opencon();
+    $cid = $_GET["cid"];
+    echo "
+    <div class=\"floating-parent\">
+    <div class=\"float-text\"> <a style=\"text-decoration:none\" href=\"createpost.php?cid=$cid\">create a post</a></div>
+    <button class=\"right-button bi-pencil-square\" onclick=\"document.location='createpost.php?cid=$cid'\" ></button>      
+</div>
+    ";
+}
+
+
+// handle creating forum post
+function loadForumCreatePost(){
+    $con = opencon();
+    $user_id = $_SESSION["id"];
+    $cid = $_GET["cid"];
+
+    echo "
+    <form action=\"function.php\" method=\"post\">
+        <section class=\"post-box\" >
+            <input type=\"text\" name=\"title\" placeholder=\"title in here\">
+            <textarea id=\"postin\" placeholder=\"Whats on your mind?\" name=\"postin\" class=\"class_44\"></textarea>
+            <button name=\"posting\">
+                Post
+            </button>
+        </section>
+    </form>
+    ";
+    
+}
+
+//handle posting in create post
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["posting"])){
+    $title = addslashes($_POST["title"]);
+    $txt = htmlspecialchars($_POST["postin"]);
+    $user_id = $_SESSION["id"];
+    $date = date("Y-m-d H:i:s");
+
+    if (empty($txt) || empty($user_id)) {
+        echo "<script>alert('please insert text to post')</script>";
+        echo '<script>document.location.href = "index.php"</script>';
+        return;
+    } else{
+        // insert the post
+        $sql = "INSERT INTO posts (post, user_id, datetime) VALUES ('$txt', '$user_id', '$date')";
+        $query = mysqli_query($con, $sql);
+        if (isset($query)) {
+            echo "<script>alert('Your post was created successfully')</script>";
+            echo '<script>document.location.href = "index.php"</script>';
+        }             
+    }
+    
 }
