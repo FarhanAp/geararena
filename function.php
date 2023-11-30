@@ -73,8 +73,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["login"])) {
     }
 }
 
+// finding out if a user login or not
+function logged_in(){
+    if (isset($_SESSION["id"])) {
+        return true;
+    }
+    return false;
+}
+
 // handle forum category
-function loadForumCategory(){
+function loadForumCategoryList(){
     $con = opencon();
     $sql = "SELECT * FROM forum_category ORDER BY id DESC";
     $query = mysqli_query($con, $sql);
@@ -85,15 +93,15 @@ function loadForumCategory(){
 
         echo "
         <tr>
-            <td> <a href=\"forumpost.php?cid=$cId\">$cId</a> </td>
-            <td> <a href='forumpost.php?cid=$cId'>$cName</a> </td>
+            <td> <a href=\"forumpostlist.php?cid=$cId\">$cId</a> </td>
+            <td> <a href='forumpostlist.php?cid=$cId'>$cName</a> </td>
         </tr>
         ";
     }
 }
 
-//handle forum post
-function loadForumPost(){
+//handle forum post list
+function loadForumPostList(){
     $caId = $_GET["cid"];
     $con = opencon();
     $sql = "SELECT * FROM forum_posts WHERE category_id= '$caId' ORDER BY id DESC";
@@ -101,10 +109,14 @@ function loadForumPost(){
 
     if(mysqli_num_rows($query) > 0){
         while($data = mysqli_fetch_assoc($query)){
+            $id = $data["id"];
+            $title = $data["title"];
+            $date = date("Y M jS", strtotime($data["inserted_at"]));
             echo "
             <tr>
-                <td> X </td>
-                <td> XX </td>
+                <td> <a href='forumpost.php?postid=$id'> $id</a> </td>
+                <td>  <a href='forumpost.php?postid=$id'> $title</a> </td>
+                <td>  <a href='forumpost.php?postid=$id'> $date</a> </td>
             </tr>
             ";
         }
@@ -123,7 +135,7 @@ function postCreation(){
     <div class=\"floating-parent\">
     <div class=\"float-text\"> <a style=\"text-decoration:none\" href=\"createpost.php?cid=$cid\">create a post</a></div>
     <button class=\"right-button bi-pencil-square\" onclick=\"document.location='createpost.php?cid=$cid'\" ></button>      
-</div>
+    </div>
     ";
 }
 
@@ -142,17 +154,18 @@ function loadForumCreatePost(){
             <button name=\"posting\">
                 Post
             </button>
+            <input type=\"hidden\" name=\"caId\" value=\"$cid\"/>
         </section>
     </form>
     ";
-    
 }
 
 //handle posting in create post
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["posting"])){
+    $user_id = $_SESSION["id"];
+    $cid = $_POST["caId"];
     $title = addslashes($_POST["title"]);
     $txt = htmlspecialchars($_POST["postin"]);
-    $user_id = $_SESSION["id"];
     $date = date("Y-m-d H:i:s");
 
     if (empty($txt) || empty($user_id)) {
@@ -161,12 +174,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["posting"])){
         return;
     } else{
         // insert the post
-        $sql = "INSERT INTO posts (post, user_id, datetime) VALUES ('$txt', '$user_id', '$date')";
-        $query = mysqli_query($con, $sql);
+        $sql = "INSERT INTO forum_posts (user_id, category_id, title, body, inserted_at) VALUES ('$user_id', '$cid', '$title', '$txt', '$date')";
+        $query = mysqli_query($connect, $sql);
         if (isset($query)) {
             echo "<script>alert('Your post was created successfully')</script>";
-            echo '<script>document.location.href = "index.php"</script>';
+            echo "<script>document.location.href = 'forumpostlist.php?cid=$cid'</script>";
         }             
     }
-    
 }
