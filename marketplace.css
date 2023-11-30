@@ -731,3 +731,22 @@ footer .copyright{
     padding: 10px;
     font-size: 13px;
 }
+
+/* ABOUT PAGE */
+#page-header.about-header{
+    background-image: url("images/banner1.jpg");
+}
+
+#about-head {
+    display: flex;
+    align-items: center;
+}
+
+#about-head img{
+    width: 50%;
+    height: auto;
+}
+
+#about-head div{
+    padding-left: 40px;
+}
