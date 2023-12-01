@@ -127,7 +127,7 @@ function loadForumPostList(){
 }
 
 
-//handle the button
+//handle the button in creating a new post
 function postCreation(){
     $con = opencon();
     $cid = $_GET["cid"];
@@ -180,5 +180,40 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["posting"])){
             echo "<script>alert('Your post was created successfully')</script>";
             echo "<script>document.location.href = 'forumpostlist.php?cid=$cid'</script>";
         }             
+    }
+}
+
+// handle load the post in forum post
+function loadPost(){
+    $con = opencon();
+    $postid = $_GET["postid"];
+    $sql = "SELECT * FROM forum_posts WHERE id='$postid'";
+    $query = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($query);
+    $title = $data["title"];
+    $body = htmlspecialchars_decode($data["body"]);
+
+    if (mysqli_num_rows($query) > 0) {
+        echo"
+            <p>$title</p>
+            <p>$body</P>
+        ";
+    }
+}
+
+// handle load the comment in forumpost
+function loadComment($id)  {
+    $con = opencon();
+    $sql = "SELECT * FROM forum_comments WHERE post_id='$id'";
+    $query = mysqli_query($con, $sql);
+
+    if ($row = mysqli_num_rows($query) > 0) {
+        echo "<ul>\n";
+            // this one will not got the proper form for the child
+            while (($data = mysqli_fetch_assoc($query)) != null){
+                var_dump($data["parent_comment_id"]);
+                echo "<li>", $data["text"], loadComment($data["id"] - 1), "</li>\n"; 
+            }
+        echo "</ul>\n";
     }
 }
