@@ -209,10 +209,16 @@ function loadComment($id)  {
 
     if ($row = mysqli_num_rows($query) > 0) {
         echo "<ul>\n";
-            // this one will not got the proper form for the child
+            // i think for now this will do
             while (($data = mysqli_fetch_assoc($query)) != null){
-                var_dump($data["parent_comment_id"]);
-                echo "<li>", $data["text"], loadComment($data["id"] - 1), "</li>\n"; 
+                if ($data["parent_comment_id"] > 0) {
+                    echo "<ul>\n";
+                    echo "<li>", $data["text"], loadComment($data["id"] - 1), "</li>\n";
+                    echo "</ul>\n";
+                } else {
+                var_dump($data["parent_comment_id"], $data["id"]);
+                echo "<li>", $data["text"], "</li>\n"; 
+                }
             }
         echo "</ul>\n";
     }
