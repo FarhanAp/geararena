@@ -204,22 +204,33 @@ function loadPost(){
 // handle load the comment in forumpost
 function loadComment($id)  {
     $con = opencon();
-    $sql = "SELECT * FROM forum_comments WHERE post_id='$id'";
+    // $sql = "SELECT * FROM forum_comments WHERE post_id='$id'";
+    $sql = "SELECT users.id,
+            parent_comment_id,
+            username,
+            text,
+            inserted_at FROM forum_comments INNER JOIN users ON forum_comments.user_id = users.id WHERE forum_comments.post_id='$id'";
     $query = mysqli_query($con, $sql);
 
-    if ($row = mysqli_num_rows($query) > 0) {
-        echo "<ul>\n";
-            // i think for now this will do
-            while (($data = mysqli_fetch_assoc($query)) != null){
-                if ($data["parent_comment_id"] > 0) {
-                    echo "<ul>\n";
-                    echo "<li>", $data["text"], loadComment($data["id"] - 1), "</li>\n";
-                    echo "</ul>\n";
-                } else {
-                var_dump($data["parent_comment_id"], $data["id"]);
-                echo "<li>", $data["text"], "</li>\n"; 
-                }
-            }
-        echo "</ul>\n";
+    if ( mysqli_num_rows($query) > 0) {
+        while (($data = mysqli_fetch_assoc($query)) != null) {
+            $name = $data["username"];
+            $date = $data["inserted_at"];
+            $txt = $data["text"];
+            echo"
+            <section class=\"comment-container\">
+                <div class=\"reply-box border p-2 mb-2\">
+                    <h5 class=\"border-bottom\">
+                    $name
+                    </h5>
+                    <h6 class=\"mb-3\">
+                        $date
+                    </h6>
+                    <p>$txt</p>
+                    <button class=\"btn-primary reply-btn\">Reply</button>
+                </div>
+            </section>
+            ";
+        }
     }
 }

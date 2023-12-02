@@ -18,7 +18,7 @@
     <link rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <link rel="stylesheet" href="forumpostlist.css">
+    <link rel="stylesheet" href="forumpost.css">
 </head>
 <body>
 
@@ -38,28 +38,36 @@
 
     <?php loadPost() ?>
 
-    <section id="comment-list">
+    <section class="comment-container">
         <?php loadComment($_GET["postid"]) ?>
-    </section>
-    <!-- <ul>
-        <li>This is the parent first comment!
-            <ul>
-                <li>This is the reply for the first parent comment!
-                    <ul>
-                        <li>This is a reply for the first reply of the parent comment!</li>
-                        <li>This is a third reply for the first parent comment!</li>
-                    </ul>
-                </li>
-                <li>This is another reply for first parent comment!</li>
-            </ul>
-        </li>
-        <li>This is gonna be parent second comment!
-            <ul>
-                <li>This is a reply for the second comment!</li>
-            </ul>
-        </li>
-        <li>This is third parent comment!</li>
-    </ul> -->
+        <!-- <div class="reply-box border p-2 mb-2">
+            <h5 class="border-bottom">Name</h5>
+            <h6 class="mb-3">Date</h6>
+            <p>this is some text</p>
+            <button class="btn-primary reply-btn">Reply</button>
+        </div> -->
+    </section> 
+    <!-- <section id="comment-list">
+        <ul>
+            <li>This is the parent first comment!
+                <ul>
+                    <li>This is the reply for the first parent comment!
+                        <ul>
+                            <li>This is a reply for the first reply of the parent comment!</li>
+                            <li>This is a third reply for the first parent comment!</li>
+                        </ul>
+                    </li>
+                    <li>This is another reply for first parent comment!</li>
+                </ul>
+            </li>
+            <li>This is gonna be parent second comment!
+                <ul>
+                    <li>This is a reply for the second comment!</li>
+                </ul>
+            </li>
+            <li>This is third parent comment!</li>
+        </ul>
+    </section> -->
     <?php if (logged_in()):?>
         <form action="function.php" method="post">
             <section class="comment-box" >
