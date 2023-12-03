@@ -228,12 +228,12 @@ function loadComment($id)  {
                                     <h5 class=\"border-bottom\">$name</h5>
                                     <h6 class=\"mb-3\">$date</h6>
                                     <p>$txt</p>
-                                    <input type=\"hidden\" name=\"commentid\ value=\"$commid\">
+                                    <input type=\"hidden\" name=\"commentid\ value=\"$commid\"/>
                                         <div class=\"action-button\">
                                             <button name=\"editing\" type=\"submit\" class=\"btn btn-outline-primary\">
                                             edit
                                             </button>
-                                            <button name=\"delete\" type=\"submit\" class=\"btn btn-outline-danger\">Delete</button>
+                                            <button name=\"delete_comment\" type=\"submit\" class=\"btn btn-outline-danger\">Delete</button>
                                         </div>
                                 </form>
                             </div>
@@ -248,6 +248,7 @@ function loadComment($id)  {
                             $date
                         </h6>
                         <p>$txt</p>
+                        <input type=\"hidden\" name=\"commentid\ value=\"$commid\">
                     </div>
                 </section>";
                 }
@@ -261,6 +262,7 @@ function loadComment($id)  {
                             $date
                         </h6>
                         <p>$txt</p>
+                        <input type=\"hidden\" name=\"commentid\ value=\"$commid\">
                     </div>
                 </section>";
             }
@@ -293,7 +295,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
     </div>";
 }
 // handle delete
-if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete"])) {
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete_comment"])) {
+    $userId = $_SESSION["id"];
+    $commentId = $_POST["commentid"];
+    $sql = "DELETE FROM forum_comments WHERE id = '$commentId' && user_id = '$userId' limit 1";
+    $query = mysqli_query($connect, $sql);
     echo "<script>
             alert('deleted');
         </script>";;
