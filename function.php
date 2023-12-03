@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["signup"])) {
                     echo"<script>
                             alert('account is succesfully created');
                         </script>";
+                    header("Location: marketplace.php");
                 } else {
                     echo mysqli_error($connect);
                 }
@@ -206,31 +207,127 @@ function loadComment($id)  {
     $con = opencon();
     // $sql = "SELECT * FROM forum_comments WHERE post_id='$id'";
     $sql = "SELECT users.id,
-            parent_comment_id,
             username,
             text,
-            inserted_at FROM forum_comments INNER JOIN users ON forum_comments.user_id = users.id WHERE forum_comments.post_id='$id'";
+            inserted_at FROM forum_comments INNER JOIN users ON forum_comments.user_id = users.id 
+            WHERE forum_comments.post_id='$id'";
     $query = mysqli_query($con, $sql);
 
     if ( mysqli_num_rows($query) > 0) {
         while (($data = mysqli_fetch_assoc($query)) != null) {
             $name = $data["username"];
             $date = $data["inserted_at"];
-            $txt = $data["text"];
-            echo"
-            <section class=\"comment-container\">
-                <div class=\"reply-box border p-2 mb-2\">
-                    <h5 class=\"border-bottom\">
-                    $name
-                    </h5>
-                    <h6 class=\"mb-3\">
-                        $date
-                    </h6>
-                    <p>$txt</p>
-                    <button class=\"btn-primary reply-btn\">Reply</button>
-                </div>
-            </section>
-            ";
+            $txt = htmlspecialchars_decode($data["text"]);
+            $commid = $data["id"];
+
+            if (logged_in()) {
+                if ($_SESSION["id"] == $data["id"]) {
+                    echo"<section class=\"comment-container\">
+                            <div class=\"reply-box border p-2 mb-2\">
+                                <form action=\"function.php\" method=\"post\">
+                                    <h5 class=\"border-bottom\">$name</h5>
+                                    <h6 class=\"mb-3\">$date</h6>
+                                    <p>$txt</p>
+                                    <input type=\"hidden\" name=\"commentid\ value=\"$commid\">
+                                        <div class=\"action-button\">
+                                            <button name=\"editing\" type=\"submit\" class=\"btn btn-outline-primary\">
+                                            edit
+                                            </button>
+                                            <button name=\"delete\" type=\"submit\" class=\"btn btn-outline-danger\">Delete</button>
+                                        </div>
+                                </form>
+                            </div>
+                        </section> ";
+                } else {
+                    echo "<section class=\"comment-container\">
+                    <div class=\"reply-box border p-2 mb-2\">
+                        <h5 class=\"border-bottom\">
+                        $name
+                        </h5>
+                        <h6 class=\"mb-3\">
+                            $date
+                        </h6>
+                        <p>$txt</p>
+                    </div>
+                </section>";
+                }
+            } else {
+                echo "<section class=\"comment-container\">
+                    <div class=\"reply-box border p-2 mb-2\">
+                        <h5 class=\"border-bottom\">
+                        $name
+                        </h5>
+                        <h6 class=\"mb-3\">
+                            $date
+                        </h6>
+                        <p>$txt</p>
+                    </div>
+                </section>";
+            }
         }
     }
 }
+
+// handle edit
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
+    echo "<div class=\"modal fade\" id=\"exampleModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">
+    <div class=\"modal-dialog\">
+        <div class=\"modal-content\">
+            <div class=\"modal-header\">
+                <h5 class=\"modal-title\" id=\"exampleModalLabel\">REPLY</h5>
+                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
+            </div>
+            <form action=\"function.php\" method=\"post\">
+                <input type=\"hidden\" name=\"postid\" value=\"postid\">
+                <input type=\"hidden\" name=\"commentid\" value=\"commentid\">
+                <div class=\"modal-body\">
+                    <textarea name=\"text-box\" style= \"width: 100%; height: 100%;\">supposed text</textarea>
+                </div>
+                <div class=\"modal-footer\">
+                    <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Close</button>
+                    <button type=\"button\" class=\"btn btn-primary\">Change</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </div>";
+}
+// handle delete
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete"])) {
+    echo "<script>
+            alert('deleted');
+        </script>";;
+}
+
+// handle create comment box
+function createCommentBox($id) {
+    echo "
+    <form action=\"function.php\" method=\"post\">
+        <div class=\"comment-box\" >
+            <textarea id=\"comment\" placeholder=\"Whats on your mind?\" name=\"comment\" class=\"class_44\"></textarea>
+                <button name=\"commenting\">
+                    Comment
+                </button>
+            <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
+        </div>
+    </form>
+";
+}
+
+// handle insert comment on post page
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["commenting"])){
+    $user_id = $_SESSION["id"];
+    $pid = $_POST["postid"];
+    $txt = htmlspecialchars($_POST["comment"]);
+    $date = date("Y-m-d H:i:s");
+
+    $sql = "INSERT INTO forum_comments (user_id, post_id, text, inserted_at) VALUES ('$user_id', '$pid', '$txt', '$date')";
+    $query = mysqli_query($connect, $sql);
+
+    if($query){
+        echo "comment succesfully";
+    }else{
+        echo "something wrong";
+    }
+}
+

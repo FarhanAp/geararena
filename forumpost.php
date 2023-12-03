@@ -38,54 +38,76 @@
 
     <?php loadPost() ?>
 
-    <section class="comment-container">
+    <!-- <button data-open-modal>Open</button>
+    
+    <dialog data-modal>
+        <form action="">
+            <input type="text">
+            <button type="submit" formmethod="dialog">Cancel</button>
+            <button type="submit">submit</button>
+        </form>
+    </dialog> -->
+
+    <!-- <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        edit
+    </button> -->
+
+    <?php if (logged_in()):?>
+    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">REPLY</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea name="text-box" style= "width: 100%; height: 100%;">supposed text</textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Change</button>
+            </div>
+            </div>
+        </div>
+    </div> -->
+    <?php endif;?>
+
+    <!-- <section class="comment-container"> -->
         <?php loadComment($_GET["postid"]) ?>
         <!-- <div class="reply-box border p-2 mb-2">
-            <h5 class="border-bottom">Name</h5>
-            <h6 class="mb-3">Date</h6>
-            <p>this is some text</p>
-            <button class="btn-primary reply-btn">Reply</button>
-        </div> -->
-    </section> 
-    <!-- <section id="comment-list">
-        <ul>
-            <li>This is the parent first comment!
-                <ul>
-                    <li>This is the reply for the first parent comment!
-                        <ul>
-                            <li>This is a reply for the first reply of the parent comment!</li>
-                            <li>This is a third reply for the first parent comment!</li>
-                        </ul>
-                    </li>
-                    <li>This is another reply for first parent comment!</li>
-                </ul>
-            </li>
-            <li>This is gonna be parent second comment!
-                <ul>
-                    <li>This is a reply for the second comment!</li>
-                </ul>
-            </li>
-            <li>This is third parent comment!</li>
-        </ul>
-    </section> -->
+            <form action="function.php" method="post">
+                <h5 class="border-bottom">Name</h5>
+                <h6 class="mb-3">Date</h6>
+                <p>this is some text</p>
+                <input type="hidden" name="commentid">
+                    <div class="action-button">
+                        <button type="button" class="btn-outline-primary">edit</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </div>
+            </form>
+        </div>
+    </section>  -->
     <?php if (logged_in()):?>
-        <form action="function.php" method="post">
-            <section class="comment-box" >
-                <textarea id="comment" placeholder="Whats on your mind?" name="comment" class="class_44"></textarea>
-                <button name="commenting">
-                    Comment
-                </button>
-                <input type="hidden" name="postid" value="postid"/>
-                <!-- parentid input only come when it reply to a comment -->
-                <input type="hidden" name="parentid" value="parentid"/>
-            </section>
-        </form>
+        <?php createCommentBox($_GET["postid"]) ?>
+        <!-- <form action="function.php" method="post">
+            <div class="comment-box" >
+                <div id="error_status"></div>
+                <textarea id="comment" placeholder="Comment here" name="comment" class="class_44"></textarea>
+                    <button name="commenting">
+                        Comment
+                    </button>
+                <input type="hidden" name="postid" value="$_GET['postid']">
+            </div>
+        </form> -->
     <?php else:?>
         <p>login or register to be able to comment</p>
     <?php endif;?>
 
     <!-- using a wysiwyg editor the name is ckeditor -->
     <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <!-- script of wysiwyg must be put at the bottom of body html -->
     <script>
