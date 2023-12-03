@@ -228,7 +228,7 @@ function loadComment($id)  {
                                     <h5 class=\"border-bottom\">$name</h5>
                                     <h6 class=\"mb-3\">$date</h6>
                                     <p>$txt</p>
-                                    <input type=\"hidden\" name=\"commentid\ value=\"$commid\"/>
+                                    <input type=\"hidden\" name=\"commentid\" value=\"$commid\"/>
                                         <div class=\"action-button\">
                                             <button name=\"editing\" type=\"submit\" class=\"btn btn-outline-primary\">
                                             edit
