@@ -171,7 +171,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["posting"])){
 
     if (empty($txt) || empty($user_id)) {
         echo "<script>alert('please insert text to post')</script>";
-        echo '<script>document.location.href = "index.php"</script>';
+        echo '<script>document.location.href = "forum.php"</script>';
         return;
     } else{
         // insert the post
@@ -206,10 +206,12 @@ function loadPost(){
 function loadComment($id)  {
     $con = opencon();
     // $sql = "SELECT * FROM forum_comments WHERE post_id='$id'";
-    $sql = "SELECT users.id,
+    $sql = "SELECT users.id AS userid,
+            forum_comments.id,
             username,
             text,
-            inserted_at FROM forum_comments INNER JOIN users ON forum_comments.user_id = users.id 
+            inserted_at
+            FROM forum_comments INNER JOIN users ON forum_comments.user_id = users.id 
             WHERE forum_comments.post_id='$id'";
     $query = mysqli_query($con, $sql);
 
@@ -221,21 +223,23 @@ function loadComment($id)  {
             $commid = $data["id"];
 
             if (logged_in()) {
-                if ($_SESSION["id"] == $data["id"]) {
+                if ($_SESSION["id"] == $data["userid"]) {
                     echo"<section class=\"comment-container\">
                             <div class=\"reply-box border p-2 mb-2\">
-                                <form action=\"function.php\" method=\"post\">
-                                    <h5 class=\"border-bottom\">$name</h5>
-                                    <h6 class=\"mb-3\">$date</h6>
-                                    <p>$txt</p>
-                                    <input type=\"hidden\" name=\"commentid\" value=\"$commid\"/>
-                                        <div class=\"action-button\">
-                                            <button name=\"editing\" type=\"submit\" class=\"btn btn-outline-primary\">
-                                            edit
-                                            </button>
+                                <h5 class=\"border-bottom\">$name</h5>
+                                <h6 class=\"mb-3\">$date</h6>
+                                <p>$txt</p>
+                                    <div class=\"action-button\">
+                                        <button name=\"edit\" type=\"submit\" class=\"btn btn-outline-primary\" onclick=\"document.location='editcomment.php?commid=$commid'\">
+                                        edit
+                                        </button>
+                                        <form action=\"function.php\" method=\"post\">
+                                            <input type=\"hidden\" name=\"commentid\" value=\"$commid\"/>
+                                            <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
                                             <button name=\"delete_comment\" type=\"submit\" class=\"btn btn-outline-danger\">Delete</button>
-                                        </div>
-                                </form>
+                                        </form>
+                                    </div>
+                                        
                             </div>
                         </section> ";
                 } else {
@@ -270,39 +274,70 @@ function loadComment($id)  {
     }
 }
 
+// creating edit page
+function editComment($commid){
+    $con = opencon();
+    $user_id = $_SESSION["id"];
+    $sql = "SELECT * FROM forum_comments WHERE id='$commid' limit 1";
+    $query = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($query);
+    $text = $data["text"];
+    $postid = $data["post_id"];
+
+    echo "
+    <form action=\"function.php\" method=\"post\">
+        <section class=\"post-box\" >
+            <textarea id=\"commentin\" placeholder=\"Mutcho Texto\" name=\"commentin\">$text</textarea>
+            <button name=\"editing\" type=\"submit\" class=\"btn btn-outline-primary\">
+                Post
+            </button>
+            <input type=\"hidden\" name=\"commId\" value=\"$commid\"/>
+            <input type=\"hidden\" name=\"postId\" value=\"$postid\"/>
+        </section>
+    </form>
+    ";
+}
+
 // handle edit
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
-    echo "<div class=\"modal fade\" id=\"exampleModal\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">
-    <div class=\"modal-dialog\">
-        <div class=\"modal-content\">
-            <div class=\"modal-header\">
-                <h5 class=\"modal-title\" id=\"exampleModalLabel\">REPLY</h5>
-                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
-            </div>
-            <form action=\"function.php\" method=\"post\">
-                <input type=\"hidden\" name=\"postid\" value=\"postid\">
-                <input type=\"hidden\" name=\"commentid\" value=\"commentid\">
-                <div class=\"modal-body\">
-                    <textarea name=\"text-box\" style= \"width: 100%; height: 100%;\">supposed text</textarea>
-                </div>
-                <div class=\"modal-footer\">
-                    <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Close</button>
-                    <button type=\"button\" class=\"btn btn-primary\">Change</button>
-                </div>
-                </div>
-            </form>
-        </div>
-    </div>";
+    $user_id = $_SESSION["id"];
+    $comment_id = $_POST["commId"];
+    $post_id = $_POST["postId"];
+    $txt = htmlspecialchars($_POST["commentin"]);
+
+    if (empty($txt) || empty($user_id)) {
+        echo "<script>alert('please insert text to post')</script>";
+        echo '<script>document.location.href = "forum.php"</script>';
+        return;
+    } else{
+        // insert the post
+        $sql = "UPDATE forum_comments SET text ='$txt' WHERE user_id ='$user_id' && id = '$comment_id' limit 1";
+        $query = mysqli_query($connect, $sql);
+        if (isset($query)) {
+            echo "<script>alert('Your comment was editted successfully')</script>";
+            echo "<script>document.location.href = 'forumpost.php?postid=$post_id'</script>";
+        }             
+    }
 }
+
 // handle delete
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete_comment"])) {
     $userId = $_SESSION["id"];
     $commentId = $_POST["commentid"];
+    $postId = $_POST["postid"];
     $sql = "DELETE FROM forum_comments WHERE id = '$commentId' && user_id = '$userId' limit 1";
     $query = mysqli_query($connect, $sql);
-    echo "<script>
+
+    if(!$query){
+        echo mysqli_error($conn);
+        die();
+    }else{
+        echo "<script>
             alert('deleted');
-        </script>";;
+        </script>";
+        header("Location: forumpost.php?postid=$postId");   
+    }
+    
 }
 
 // handle create comment box
@@ -311,7 +346,7 @@ function createCommentBox($id) {
     <form action=\"function.php\" method=\"post\">
         <div class=\"comment-box\" >
             <textarea id=\"comment\" placeholder=\"Whats on your mind?\" name=\"comment\" class=\"class_44\"></textarea>
-                <button name=\"commenting\">
+                <button name=\"commenting\" class=\"btn btn-outline-primary\">
                     Comment
                 </button>
             <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
