@@ -67,7 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["login"])) {
         if (password_verify($password, $data['password'])) {
             $_SESSION["id"] = $data["id"];
             $_SESSION['username'] = $data["username"];
-            header("Location: marketplace.php");
+            $_SESSION['type'] = $data["type"];
+            if ($_SESSION['type'] == 0) {
+                header("Location: marketplace.php");
+            } else{
+                echo "<script>alert('opening admin pannel')</script>";
+                header("Location: /geararena/adminpanel/index.php");
+            }
         } else {
             header("Location: login.php?user=notFound");
         }
