@@ -1,17 +1,17 @@
 <?php
-
+include "dbconn.php";
 session_start();
 
 $connect = opencon();
-function opencon(){
-    //create connection: server, user, password, database
-    $connection = mysqli_connect("localhost", "root", "", "geararena"); 
+// function opencon(){
+//     //create connection: server, user, password, database
+//     $connection = mysqli_connect("localhost", "root", "", "geararena"); 
 
-    if(!$connection){
-        die("failed to connect: ".mysqli_connect_error());
-    }
-    return $connection;
-}
+//     if(!$connection){
+//         die("failed to connect: ".mysqli_connect_error());
+//     }
+//     return $connection;
+// }
 
 //handle register
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["signup"])) {
