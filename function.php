@@ -372,9 +372,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["commenting"])){
     $query = mysqli_query($connect, $sql);
 
     if($query){
-        echo "comment succesfully";
+        echo
+        "<script>
+                            alert('COMMENT SUCSESSFUL');
+                        </script>"; 
+                        header("Location: forumpost.php?postid=$pid");
     }else{
-        echo "something wrong";
+        "<script>
+                            alert('SOMETHING WRONG');
+                        </script>";
     }
 }
 

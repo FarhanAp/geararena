@@ -30,12 +30,12 @@ require 'function.php';
                 <input type="email" class="input-field" name="email" required>
                 <i class="bx bx-envelope"></i>
             </div>
-            <div class="input-box">
+            <div class="input-box fa fa-fw fa-eye field-icon toggle-password">
                 <label for="pass">Password</label>
                 <input type="password" class="input-field" name="pass" required>
                 <i class="bx bx-lock"></i>
             </div>
-            <div class="input-box">
+            <div class="input-box fa fa-fw fa-eye field-icon toggle-password">
                 <label for="conpass">Confirm Password</label>
                 <input type="password" class="input-field" name="conpass" required>
                 <i class="bx bx-lock"></i>
@@ -51,5 +51,18 @@ require 'function.php';
        </div>
        <div class="wrapper"></div>
     </div>
+    <script>
+        $(".toggle-password").click(function() {
+
+$(this).toggleClass("fa-eye fa-eye-slash");
+var input = $($(this).attr("toggle"));
+if (input.attr("type") == "password") {
+  input.attr("type", "text");
+} else {
+  input.attr("type", "password");
+}
+});
+</script>
 </body>
 </html>
+
