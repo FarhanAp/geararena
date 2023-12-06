@@ -1,5 +1,5 @@
 <?php
-    require('../function.php');
+    require('functionadmin.php');
     require "session.php";
     include "headeradmin.php";
 
@@ -24,7 +24,7 @@
 
     <div class="container mt-5 col-lg-8 col-md-6">
         <div class="row mt-5">
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-4 col-md-6">
                 <div class="box summary-box p-2">
                     <div class="row">
                         <div class="col-6">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-4 col-md-6">
                 <div class="box summary-box p-2">
                     <div class="row">
                         <div class="col-6">
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-4 col-md-6">
                 <div class="box summary-box p-2">
                     <div class="row">
                         <div class="col-6">
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-12 col-md-6">
                 <div class="box summary-box p-2">
                     <div class="row">
                         <div class="col-6">

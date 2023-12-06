@@ -3,15 +3,6 @@ include "dbconn.php";
 session_start();
 
 $connect = opencon();
-// function opencon(){
-//     //create connection: server, user, password, database
-//     $connection = mysqli_connect("localhost", "root", "", "geararena"); 
-
-//     if(!$connection){
-//         die("failed to connect: ".mysqli_connect_error());
-//     }
-//     return $connection;
-// }
 
 //handle register
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["signup"])) {
@@ -229,7 +220,7 @@ function loadComment($id)  {
             $commid = $data["id"];
 
             if (logged_in()) {
-                if ($_SESSION["id"] == $data["userid"]) {
+                if ($_SESSION["type"] == 1) {
                     echo"<section class=\"comment-container\">
                             <div class=\"reply-box border p-2 mb-2\">
                                 <h5 class=\"border-bottom\">$name</h5>
@@ -244,8 +235,26 @@ function loadComment($id)  {
                                             <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
                                             <button name=\"delete_comment\" type=\"submit\" class=\"btn btn-outline-danger\">Delete</button>
                                         </form>
-                                    </div>
-                                        
+                                    </div>       
+                            </div>
+                        </section> ";
+                }
+                elseif ($_SESSION["id"] == $data["userid"]) {
+                    echo"<section class=\"comment-container\">
+                            <div class=\"reply-box border p-2 mb-2\">
+                                <h5 class=\"border-bottom\">$name</h5>
+                                <h6 class=\"mb-3\">$date</h6>
+                                <p>$txt</p>
+                                    <div class=\"action-button\">
+                                        <button name=\"edit\" type=\"submit\" class=\"btn btn-outline-primary\" onclick=\"document.location='editcomment.php?commid=$commid'\">
+                                        edit
+                                        </button>
+                                        <form action=\"function.php\" method=\"post\">
+                                            <input type=\"hidden\" name=\"commentid\" value=\"$commid\"/>
+                                            <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
+                                            <button name=\"delete_comment\" type=\"submit\" class=\"btn btn-outline-danger\">Delete</button>
+                                        </form>
+                                    </div>       
                             </div>
                         </section> ";
                 } else {
@@ -307,6 +316,7 @@ function editComment($commid){
 // handle edit
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
     $user_id = $_SESSION["id"];
+    $type = $_SESSION["type"];
     $comment_id = $_POST["commId"];
     $post_id = $_POST["postId"];
     $txt = htmlspecialchars($_POST["commentin"]);
@@ -315,8 +325,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
         echo "<script>alert('please insert text to post')</script>";
         echo '<script>document.location.href = "forum.php"</script>';
         return;
-    } else{
-        // insert the post
+    } elseif ($type == 1) {
+        $sql = "UPDATE forum_comments SET text ='$txt' WHERE id = '$comment_id' limit 1";
+        $query = mysqli_query($connect, $sql);
+        if (isset($query)) {
+            echo "<script>alert('Your comment was editted successfully')</script>";
+            echo "<script>document.location.href = 'forumpost.php?postid=$post_id'</script>";
+        }
+    } 
+    else{
+        // edit the comment
         $sql = "UPDATE forum_comments SET text ='$txt' WHERE user_id ='$user_id' && id = '$comment_id' limit 1";
         $query = mysqli_query($connect, $sql);
         if (isset($query)) {
@@ -374,13 +392,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["commenting"])){
     if($query){
         echo
         "<script>
-                            alert('COMMENT SUCSESSFUL');
-                        </script>"; 
-                        header("Location: forumpost.php?postid=$pid");
+            alert('COMMENT SUCSESSFUL');
+        </script>";
+        header("Location: forumpost.php?postid=$pid");
     }else{
         "<script>
-                            alert('SOMETHING WRONG');
-                        </script>";
+            alert('SOMETHING WRONG');
+        </script>";
     }
 }
-

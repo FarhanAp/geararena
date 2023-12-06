@@ -1,0 +1,29 @@
+.floating-parent{
+	position: fixed;
+	bottom: 5%;
+	right: 18px;
+	text-align: center;
+	color: #3333FF;
+}
+
+.float-text{
+    display: none;
+}
+.floating-parent:hover .float-text{
+	display: contents;
+	height: 30px;
+}
+
+.floating-parent .right-button{
+	width: auto;
+	height: auto;
+	border-radius: 50%;
+	background-repeat: no-repeat;
+	background-color: #3333FF;
+	background-size: 24px;
+	background-position: center;
+	float: left;
+	margin: 0 auto;
+	cursor: pointer;
+	box-shadow: 0 -2px 3px -1px #3333FF;
+}
