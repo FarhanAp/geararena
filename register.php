@@ -30,12 +30,12 @@ require 'function.php';
                 <input type="email" class="input-field" name="email" required>
                 <i class="bx bx-envelope"></i>
             </div>
-            <div class="input-box fa fa-fw fa-eye field-icon toggle-password">
+            <div class="input-box ">
                 <label for="pass">Password</label>
                 <input type="password" class="input-field" name="pass" required>
                 <i class="bx bx-lock"></i>
             </div>
-            <div class="input-box fa fa-fw fa-eye field-icon toggle-password">
+            <div class="input-box ">
                 <label for="conpass">Confirm Password</label>
                 <input type="password" class="input-field" name="conpass" required>
                 <i class="bx bx-lock"></i>
