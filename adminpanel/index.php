@@ -8,6 +8,9 @@
 
     $sql2 = mysqli_query($connect, "SELECT * FROM products_category");
     $totalproduct = mysqli_num_rows($sql2);
+
+    $sql3 = mysqli_query($connect, "SELECT * FROM users WHERE type = 0");
+    $totalusers = mysqli_num_rows($sql3);
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +35,7 @@
                         </div>
                         <div class="col-6">
                             <h4>forum category</h4>
-                            <p><?php echo $totalforum ?> category</p>
+                            <p><?php echo $totalforum ?> categories</p>
                             <p><a href="forumcategory.php" style="text-decoration:none">detail</a></p>
                         </div>
                     </div>
@@ -47,7 +50,7 @@
                         </div>
                         <div class="col-6">
                             <h4>market category</h4>
-                            <p><?php echo $totalproduct ?> category</p>
+                            <p><?php echo $totalproduct ?> categories</p>
                             <p><a href="marketplacedetail.php" style="text-decoration:none">detail</a></p>
                         </div>
                     </div>
@@ -62,7 +65,7 @@
                         </div>
                         <div class="col-6">
                             <h4>users detail</h4>
-                            <p><?php echo $totalproduct ?> category</p>
+                            <p><?php echo $totalusers ?> users</p>
                             <p><a href="users.php" style="text-decoration:none">detail</a></p>
                         </div>
                     </div>
@@ -77,7 +80,7 @@
                         </div>
                         <div class="col-6">
                             <h4>selling item</h4>
-                            <p><?php echo $totalproduct ?> category</p>
+                            <p><?php echo $totalproduct ?> items</p>
                             <p><a href="sell.php" style="text-decoration:none">detail</a></p>
                         </div>
                     </div>

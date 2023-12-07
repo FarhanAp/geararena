@@ -43,7 +43,7 @@ function categoryForumCreation() {
 // users
 function loadUsers() {
     $con = opencon();
-    $sql = "SELECT * FROM users ORDER BY id DESC";
+    $sql = "SELECT * FROM users WHERE type != 1 ORDER BY id DESC";
     $query = mysqli_query($con, $sql);
 
     while($data = mysqli_fetch_assoc($query)){
@@ -63,13 +63,14 @@ function loadUsers() {
 
             <form action=\"functionadmin.php\" method=\"post\">
 
-                <input type=\"hidden\" name=\"CFID\" value=\"$Id\">
-                <input type=\"hidden\" name=\"CFName\" value=\"$Name\">
-                <td><button name=\"EditCategory\" class=\"right-button btn btn-outline-success\"formaction=\"edituser.php\">Edit</button>
+                <input type=\"hidden\" name=\"UID\" value=\"$Id\">
+                <input type=\"hidden\" name=\"UName\" value=\"$Name\">
+                <input type=\"hidden\" name=\"Email\" value=\"$Email\">
+                <input type=\"hidden\" name=\"Type\" value=\"$Type\">
+                <td><button name=\"EditUser\" class=\"right-button btn btn-outline-success\"formaction=\"edituser.php\">Edit</button>
 
-                <button name=\"deleteUSERS\" class=\"right-button btn btn-outline-danger\">Delete</button>
+                <button name=\"deleteUSER\" class=\"right-button btn btn-outline-danger\">Delete</button></td>
             </form>
-            </td>
         </tr>
         ";
     }
@@ -104,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deleteCF"])) {
     $query = mysqli_query($connect, $sql);
 
     if(!$query){
-        echo mysqli_error($conn);
+        echo mysqli_error($connect);
         die();
     }else{
         header("Location: forumcategory.php");   
@@ -119,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditCF"])) {
     $sql_check = mysqli_query($connect, $check_exist);
 
     if (!$sql_check) {
-        echo mysqli_error($conn);
+        echo mysqli_error($connect);
         die();
     }else {
         if (mysqli_num_rows($sql_check) > 0) {
@@ -130,6 +131,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditCF"])) {
             header("Location: forumcategory.php");  
         } 
     }
+}
 
-    
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditU"])) {
+    $user_id = $_POST["UID"];
+    $user_type = $_POST["UType"];
+    $user_name = htmlspecialchars($_POST["inputName"]);
+    $user_email = filter_var($_POST["UEmail"], FILTER_VALIDATE_EMAIL);
+
+    $sql = "UPDATE users SET username ='$user_name', type='$user_type', email='$user_email' WHERE id ='$user_id' limit 1";
+    $query = mysqli_query($connect, $sql);
+
+    if (!$sql) {
+        echo mysqli_error($connect);
+        die();
+    }else {
+        echo "<script>
+            document.location.href = 'users.php'
+        </script>";  
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deleteUSER"])) {
+    $user_id = $_POST["UID"];
+    $user_type = $_POST["Type"];
+
+    if ($user_type == 0) {
+        $sql = "DELETE FROM users WHERE id = '$user_id' && type = '$user_type' limit 1";
+        $query = mysqli_query($connect, $sql);
+        if(!$query){
+            echo mysqli_error($conn);
+            die();
+        }else{
+            echo "<script>
+                        alert('user has been deleted');
+                </script>",
+                "<script>
+                    document.location.href = 'users.php'
+                </script>";   
+        }
+    } else {
+        echo "<script>
+                alert('CAN'T DELETE ADMIN');
+            </script>";
+    }
+
 }

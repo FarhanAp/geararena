@@ -347,19 +347,30 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
 // handle delete
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete_comment"])) {
     $userId = $_SESSION["id"];
+    $type = $_SESSION["type"];
     $commentId = $_POST["commentid"];
     $postId = $_POST["postid"];
-    $sql = "DELETE FROM forum_comments WHERE id = '$commentId' && user_id = '$userId' limit 1";
-    $query = mysqli_query($connect, $sql);
+    
+
+    if ($type == 1) {
+        $sql = "DELETE FROM forum_comments WHERE id = '$commentId' limit 1";
+        $query = mysqli_query($connect, $sql);
+        
+    } else {
+        $sql = "DELETE FROM forum_comments WHERE id = '$commentId' && user_id = '$userId' limit 1";
+        $query = mysqli_query($connect, $sql);
+    }
 
     if(!$query){
         echo mysqli_error($conn);
         die();
     }else{
         echo "<script>
-            alert('deleted');
-        </script>";
-        header("Location: forumpost.php?postid=$postId");   
+                    alert('deleted the comment');
+            </script>",
+            "<script>
+                document.location.href = 'forumpost.php?postid=$postId'
+            </script>";   
     }
     
 }
@@ -393,11 +404,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["commenting"])){
         echo
         "<script>
             alert('COMMENT SUCSESSFUL');
+        </script>",
+        "<script>
+            document.location.href = 'forumpost.php?postid=$pid'
         </script>";
-        header("Location: forumpost.php?postid=$pid");
     }else{
+        echo
         "<script>
             alert('SOMETHING WRONG');
         </script>";
+        echo mysqli_error($conn);
     }
 }
