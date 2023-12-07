@@ -76,7 +76,41 @@ function loadUsers() {
     }
 }
 
+//product category
+function loadProductCategoryList() {
+    $con = opencon();
+    $sql = "SELECT * FROM products_category ORDER BY id DESC";
+    $query = mysqli_query($con, $sql);
 
+    if (mysqli_num_rows($query) == 0) {
+        echo "<tr>
+                <td colspan =\"3\">No Data Yet</td> 
+            </tr>";
+    } else {
+        while($data = mysqli_fetch_assoc($query)){
+            $cId = $data["id"];
+            $cName = $data["Name"];
+    
+            echo "
+            <tr>
+                <td>$cId</td>
+                <td>$cName</td>
+                <form action=\"functionadmin.php\" method=\"post\">
+    
+                    <input type=\"hidden\" name=\"CPID\" value=\"$cId\">
+                    <input type=\"hidden\" name=\"CPName\" value=\"$cName\">
+                    <td><button name=\"EditCategoryProduct\" class=\"right-button btn btn-outline-success\"formaction=\"editcategoryproduct.php\">Edit</button>
+    
+                    <button name=\"deleteCP\" class=\"right-button btn btn-outline-danger\">Delete</button>
+                </form>
+                </td>
+            </tr>
+            ";
+        }
+    }
+}
+
+// forum category
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreateCF"])) {
     $user_id = $_SESSION["id"];
     $user_type = $_SESSION["type"];
@@ -95,8 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreateCF"])) {
         header("Location: forumcategory.php");
     }
 }
-
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deleteCF"])) {
     $category_forum = $_POST["CFID"];
@@ -133,6 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditCF"])) {
     }
 }
 
+// users
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditU"])) {
     $user_id = $_POST["UID"];
     $user_type = $_POST["UType"];
@@ -176,4 +209,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deleteUSER"])) {
             </script>";
     }
 
+}
+
+// product category
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreateCP"])) {
+    $user_id = $_SESSION["id"];
+    $user_type = $_SESSION["type"];
+    $category = htmlspecialchars($_POST["inputCategory"]);
+
+    $check_exist = "SELECT * FROM products_category WHERE (name) LIKE '%$category%'";
+    $sql_check = mysqli_query($connect, $check_exist);
+
+
+    if (mysqli_num_rows($sql_check) > 0) {
+        echo "this category is already inserted";
+    } 
+    else {
+        $query = "INSERT INTO products_category (name) values('$category')";
+        $sql = mysqli_query($connect, $query);
+        echo "<script>
+                document.location.href = 'marketplacedetail.php'
+            </script>";
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditCP"])) {
+    $category_id = $_POST["CID"];
+    $category_name = htmlspecialchars($_POST["inputCategory"]);
+
+    $check_exist = "SELECT * FROM products_category WHERE (name) LIKE '%$category_name%'";
+    $sql_check = mysqli_query($connect, $check_exist);
+
+    if (!$sql_check) {
+        echo mysqli_error($connect);
+        die();
+    }else {
+        if (mysqli_num_rows($sql_check) > 0) {
+            echo "<script>
+                    alert('this category is already exist');
+                </script>",
+                "<script>
+                    document.location.href = 'marketplacedetail.php'
+                </script>";
+
+        } else {
+            $sql = "UPDATE products_category SET name ='$category_name' WHERE id = '$category_id' limit 1";
+            $query = mysqli_query($connect, $sql);
+            header("Location: marketplacedetail.php");  
+        } 
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deleteCP"])) {
+    $category_forum = $_POST["CPID"];
+    $sql = "DELETE FROM products_category WHERE id = '$category_forum' limit 1";
+    $query = mysqli_query($connect, $sql);
+
+    if(!$query){
+        echo mysqli_error($connect);
+        die();
+    }else{
+        echo
+        "<script>
+            document.location.href = 'marketplacedetail.php'
+        </script>";  
+    }
 }

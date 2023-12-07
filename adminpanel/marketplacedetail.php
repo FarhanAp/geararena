@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-                <?php loadUsers()?>
+                <?php loadProductCategoryList()?>
             </tbody>
         </table>
     </section>
