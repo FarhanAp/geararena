@@ -30,7 +30,7 @@
         <div class="form-group row">
             <label for="UType" class="col-sm-2 col-form-label">User Type</label>
             <div class="col-sm-2">
-            <input type="number" name="UType" class="form-control" id="UType" value="<?php echo $type?>">
+            <input type="number" name="UType" class="form-control" id="UType" min="0" max="1" value="<?php echo $type?>">
             </div>
         </div>
         <div class="form-group row">

@@ -275,3 +275,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deleteCP"])) {
         </script>";  
     }
 }
+
+// products
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreatePro"])) {
+    $users_id = $_SESSION["id"];
+    $product = htmlspecialchars(strtolower($_POST["Newproduct"]));
+    $category = htmlspecialchars($_POST["inputCategory"]);
+    $price = htmlspecialchars($_POST["price"]);
+    $quantity = htmlspecialchars($_POST["quantity"]);
+    $detail = htmlspecialchars($_POST["detail"]);
+
+    $target_dir = "../assets/image/product/";
+    $file_name = basename($_FILES["photo"]["name"]);
+    $target_file = $target_dir . $file_name;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $image_size = $_FILES["photo"]["size"];
+    $random_name = uniqid('',true);
+    $true_file_name = $random_name.".".$imageFileType;
+
+
+
+    if ($product == '' || $category == '' || $price == '' || $quantity == '') {
+        echo "<script>
+                alert('the data (name, category, price, and the quantity) must be filled');
+            </script>",
+            "<script>
+                document.location.href = 'insertproduct.php'
+            </script>";  
+    } else {
+        if (isset($file_name)) {
+            // this size is equivalent to 5MB, Byte not bit
+            if ($image_size > 5242880) {
+                echo "<script>
+                        alert('file size exceed the maximum size allowed (5MB)');
+                    </script>",
+                    "<script>
+                        document.location.href = 'insertproduct.php'
+                    </script>";
+            } else {
+                if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'webp' && $imageFileType != 'gif') {
+                    echo "<script>
+                        alert('file type is not supported');
+                        </script>",
+                        "<script>
+                            document.location.href = 'insertproduct.php'
+                        </script>";
+                } else {
+                    move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir.$true_file_name);
+                    echo "<script>
+                            alert('product has been added');
+                        </script>",
+                        "<script>
+                            document.location.href = 'insertproduct.php'
+                        </script>";  
+                }
+            }
+        }
+        // INSERT query
+        $query = "INSERT INTO products (product, price, quantity, category_id, users_id, photo, detail) VALUES('$product','$price','$quantity','$category','$users_id','$random_name','$detail')";
+        $sql = mysqli_query($connect, $query);
+
+        if($query){
+            echo
+            "<script>
+                alert('full data has been inserted');
+            </script>";
+            
+        }else{
+            echo mysqli_error($connect);
+            die();
+        }
+    }
+}

@@ -7,10 +7,13 @@
     $totalforum = mysqli_num_rows($sql1);
 
     $sql2 = mysqli_query($connect, "SELECT * FROM products_category");
-    $totalproduct = mysqli_num_rows($sql2);
+    $totalproductcategory = mysqli_num_rows($sql2);
 
     $sql3 = mysqli_query($connect, "SELECT * FROM users WHERE type = 0");
     $totalusers = mysqli_num_rows($sql3);
+
+    $sql4 = mysqli_query($connect, "SELECT * FROM products");
+    $totalproducts = mysqli_num_rows($sql4);
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +52,8 @@
                             <i class="fa-solid fa-store fa-4x text-black-50"></i>
                         </div>
                         <div class="col-6">
-                            <h4>market category</h4>
-                            <p><?php echo $totalproduct ?> categories</p>
+                            <h4>market details</h4>
+                            <p><?php echo $totalproductcategory ?> categories</p>
                             <p><a href="marketplacedetail.php" style="text-decoration:none">detail</a></p>
                         </div>
                     </div>
@@ -64,7 +67,7 @@
                         <i class="fa-solid fa-people-arrows fa-4x text-black-50"></i>
                         </div>
                         <div class="col-6">
-                            <h4>users detail</h4>
+                            <h4>users section</h4>
                             <p><?php echo $totalusers ?> users</p>
                             <p><a href="users.php" style="text-decoration:none">detail</a></p>
                         </div>
@@ -80,8 +83,8 @@
                         </div>
                         <div class="col-6">
                             <h4>selling item</h4>
-                            <p><?php echo $totalproduct ?> items</p>
-                            <p><a href="sell.php" style="text-decoration:none">detail</a></p>
+                            <p><?php echo $totalproducts ?> items</p>
+                            <p><a href="insertproduct.php" style="text-decoration:none">detail</a></p>
                         </div>
                     </div>
                 </div>
