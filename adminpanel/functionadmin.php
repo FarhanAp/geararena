@@ -110,6 +110,55 @@ function loadProductCategoryList() {
     }
 }
 
+// products
+function loadProductList() {
+    $con = opencon();
+    // create a select statement and join 3 tables
+    $sql = "SELECT  products.id AS pid,
+                    category_id,
+                    products_category.id AS cid,
+                    products_category.Name AS category_name,
+                    product, price, quantity, users_id, username FROM products 
+                    INNER JOIN products_category ON
+                    category_id = products_category.id
+                    INNER JOIN users ON users_id = users.id";
+    $query = mysqli_query($con, $sql);
+
+    if (mysqli_num_rows($query) == 0) {
+        echo "<tr>
+                <td colspan =\"7\">No Data Yet</td> 
+            </tr>";
+    } else {
+        while($data = mysqli_fetch_assoc($query)){
+            $Id = $data["pid"];
+            $username = $data["username"];
+            $product = $data["product"];
+            $price = $data["price"];
+            $quantity = $data["quantity"];
+            $category = $data["category_name"];
+    
+            echo "
+            <tr>
+                <td>$Id</td>
+                <td>$username</td>
+                <td>$product</td>
+                <td>$price</td>
+                <td>$quantity</td>
+                <td>$category</td>
+                <form action=\"functionadmin.php\" method=\"post\">
+    
+                    <input type=\"hidden\" name=\"PID\" value=\"$Id\">
+                    <input type=\"hidden\" name=\"PName\" value=\"$product\">
+                    <td><button name=\"EditProduct\" class=\"right-button btn btn-outline-success\"formaction=\"editproduct.php\">Edit</button>
+    
+                    <button name=\"deleteP\" class=\"right-button btn btn-outline-danger\">Delete</button>
+                </form>
+                </td>
+            </tr>";
+        }
+    }
+}
+
 // forum category
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreateCF"])) {
     $user_id = $_SESSION["id"];
@@ -285,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreatePro"])) {
     $quantity = htmlspecialchars($_POST["quantity"]);
     $detail = htmlspecialchars($_POST["detail"]);
 
-    $target_dir = "../assets/image/product/";
+    $target_dir = "../../gearproduct/image/products/";
     $file_name = basename($_FILES["photo"]["name"]);
     $target_file = $target_dir . $file_name;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -313,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreatePro"])) {
                         document.location.href = 'insertproduct.php'
                     </script>";
             } else {
-                if ($imageFileType != 'jpg' && $imageFileType != 'png' && $imageFileType != 'webp' && $imageFileType != 'gif') {
+                if ($imageFileType != 'jpg' && $imageFileType != 'jpeg' && $imageFileType != 'png' && $imageFileType != 'webp' && $imageFileType != 'gif') {
                     echo "<script>
                         alert('file type is not supported');
                         </script>",

@@ -30,7 +30,7 @@
             <thead class="table-dark text-center">
                 <tr>
                     <th scope="col">Id</th>
-                    <th scope="col">product name</th>
+                    <th scope="col">Product Category</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
