@@ -3,7 +3,7 @@
     require "session.php";
     include "headeradmin.php";
 
-    $queryCategory = mysqli_query($connect, "SELECT * FROM products");
+    $queryCategory = mysqli_query($connect, "SELECT * FROM products_category");
 ?>
 
 <!DOCTYPE html>

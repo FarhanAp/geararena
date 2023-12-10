@@ -118,7 +118,7 @@ function loadProductList() {
                     category_id,
                     products_category.id AS cid,
                     products_category.Name AS category_name,
-                    product, price, quantity, users_id, username FROM products 
+                    product, price, quantity, photo, users_id,  username FROM products 
                     INNER JOIN products_category ON
                     category_id = products_category.id
                     INNER JOIN users ON users_id = users.id";
@@ -136,6 +136,7 @@ function loadProductList() {
             $price = $data["price"];
             $quantity = $data["quantity"];
             $category = $data["category_name"];
+            $photo = $data["photo"];
     
             echo "
             <tr>
@@ -149,9 +150,10 @@ function loadProductList() {
     
                     <input type=\"hidden\" name=\"PID\" value=\"$Id\">
                     <input type=\"hidden\" name=\"PName\" value=\"$product\">
+                    <input type=\"hidden\" name=\"Pphoto\" value=\"$photo\">
                     <td><button name=\"EditProduct\" class=\"right-button btn btn-outline-success\"formaction=\"editproduct.php\">Edit</button>
     
-                    <button name=\"deleteP\" class=\"right-button btn btn-outline-danger\">Delete</button>
+                    <button name=\"deletePro\" class=\"right-button btn btn-outline-danger\">Delete</button>
                 </form>
                 </td>
             </tr>";
@@ -381,7 +383,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreatePro"])) {
             }
         }
         // INSERT query
-        $query = "INSERT INTO products (product, price, quantity, category_id, users_id, photo, detail) VALUES('$product','$price','$quantity','$category','$users_id','$random_name','$detail')";
+        $query = "INSERT INTO products (product, price, quantity, category_id, users_id, photo, detail) VALUES('$product','$price','$quantity','$category','$users_id','$true_file_name','$detail')";
         $sql = mysqli_query($connect, $query);
 
         if($query){
@@ -394,5 +396,114 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["CreatePro"])) {
             echo mysqli_error($connect);
             die();
         }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditPro"])) {
+    $users_id = $_SESSION["id"];
+    $pid = $_POST["PID"];
+    $product = htmlspecialchars(strtolower($_POST["Editproduct"]));
+    $category = htmlspecialchars($_POST["inputCategory"]);
+    $price = htmlspecialchars($_POST["price"]);
+    $quantity = htmlspecialchars($_POST["quantity"]);
+    $detail = htmlspecialchars($_POST["detail"]);
+
+    $target_dir = "../../gearproduct/image/products/";
+    $file_name = basename($_FILES["photo"]["name"]);
+    $target_file = $target_dir . $file_name;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    $image_size = $_FILES["photo"]["size"];
+    $random_name = uniqid('',true);
+    $true_file_name = $random_name.".".$imageFileType;
+
+    if ($product == '' || $category == '' || $price == '' || $quantity == '') {
+        echo "<script>
+                alert('the data (name, category, price, and the quantity) must be filled');
+            </script>",
+            "<script>
+                document.location.href = 'insertproduct.php'
+            </script>";
+    } else {
+        $sql = "UPDATE products SET product ='$product',
+                                    price = '$price',
+                                    quantity = '$quantity',
+                                    category_id = '$category',
+                                    detail = '$detail' WHERE id ='$pid' limit 1";
+        $queryUpdate = mysqli_query($connect, $sql);
+
+        if (!empty($file_name)) {
+            // this size is equivalent to 5MB, Byte not bit
+            if ($image_size > 5242880) {
+                echo "<script>
+                        alert('file size exceed the maximum size allowed (5MB)');
+                    </script>",
+                    "<script>
+                        document.location.href = 'insertproduct.php'
+                    </script>";
+            } else {
+                if ($imageFileType != 'jpg' && $imageFileType != 'jpeg' && $imageFileType != 'png' && $imageFileType != 'webp' && $imageFileType != 'gif') {
+                    echo "<script>
+                    alert('file type is not supported');
+                    </script>",
+                    "<script>
+                        document.location.href = 'insertproduct.php'
+                    </script>";
+                } else {
+                    move_uploaded_file($_FILES["photo"]["tmp_name"], $target_dir.$true_file_name);
+                    $sql = "UPDATE products SET product ='$product',
+                                                price = '$price',
+                                                quantity = '$quantity',
+                                                category_id = '$category',
+                                                photo = '$true_file_name',
+                                                detail = '$detail'
+                                                WHERE id ='$pid' limit 1";
+                    $queryUpdate = mysqli_query($connect, $sql);
+                    
+                    if ($queryUpdate) {
+                        echo "<script>
+                            alert('product has been updated');
+                        </script>",
+                        "<script>
+                            document.location.href = 'insertproduct.php'
+                        </script>";
+                    } else {
+                        echo mysqli_error($connect);
+                    }
+                }
+            }
+        }
+
+        if($queryUpdate){
+            echo
+            "<script>
+                alert('data has been edited');
+                document.location.href = 'insertproduct.php'
+            </script>";
+            
+        } else{
+            echo mysqli_error($connect);
+            die();
+        }
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deletePro"])) {
+    $product_id = $_POST["PID"];
+    $photo = $_POST["Pphoto"];
+    $target_dir = "../../gearproduct/image/products/";
+    $photo_path = $target_dir.$photo;
+
+    $sql = "DELETE FROM products WHERE id = '$product_id' limit 1";
+    $query = mysqli_query($connect, $sql);
+
+    if(!$query || !unlink($photo_path)){
+        echo "something went wrong when deleting";
+        echo mysqli_error($connect);
+    }else{
+        echo
+        "<script>
+            alert('product has been deleted');
+            document.location.href = 'insertproduct.php'
+        </script>";  
     }
 }

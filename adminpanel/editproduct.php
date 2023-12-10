@@ -6,14 +6,14 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditProduct"])) {
         $id = $_POST["PID"];
         $product = $_POST["PName"];
-        // SELECT  products.id AS pid,
-        //             category_id,
-        //             products_category.id AS cid,
-        //             products_category.Name AS category_name,
-        //             product, price, quantity, users_id, username FROM products 
-        //             INNER JOIN products_category ON
-        //             category_id = products_category.id
-        $queryCategory = mysqli_query($connect, "SELECT * FROM products WHERE id='$id'");
+        $queryProduct = mysqli_query($connect,
+                                        "SELECT products.*, products_category.Name AS cname
+                                        FROM products INNER JOIN products_category
+                                        ON category_id = products_category.id WHERE products.id='$id'");
+        $datapro = mysqli_fetch_assoc($queryProduct);
+        $proCat = $datapro["category_id"];
+
+        $queryCategory = mysqli_query($connect,"SELECT * FROM products_category WHERE id !='$proCat'");
     }
 ?>
 
@@ -25,31 +25,36 @@
     <title>Edit Product</title>
 </head>
 <body>
-    <section class="container mt-5" >
-        <h6>Insert a New Product</h6>
+    <section class="container mt-5 mb-4" >
+        <h5>Edit A Product</h5>
         <form action="functionadmin.php" method="post" enctype="multipart/form-data" autocomplete="off">
+            <input type="hidden" name="PID" value="<?= $id ?>">
             <div class="form-group row mb-3">
-                <label for="name">Product Name</label>
-                <input type="text" name="Newproduct" id="Newproduct" class="form-control" value="<?= $product ?>" required>
+                <label for="Editproduct">Product Name</label>
+                <input type="text" name="Editproduct" id="Editproduct" class="form-control" value="<?= $product ?>" required>
             </div>
             <div class="form-group row mb-3">
                 <label for="inputCategory">Select Category</label>
                 <select name="inputCategory" id="inputCategory" class="form-control" required>
-                    <option value="">Choose 1 category</option>
+                    <option value="<?= $datapro["category_id"] ?>"> <?= $datapro["cname"] ?> </option>
                     <?php 
-                        while ($data = mysqli_fetch_assoc($queryCategory)) { 
+                        while ($dataCat = mysqli_fetch_assoc($queryCategory)) { 
                     ?>
-                        <option value="<?= $data["id"] ?>"> <?= $data["product"] ?> </option>
+                        <option value="<?= $dataCat["id"] ?>"> <?= $dataCat["Name"] ?> </option>
                     <?php } ?>
                 </select>
             </div>
             <div class="form-group row mb-3">
                 <label for="price">Price</label>
-                <input type="number" name="price" id="price" min="1" class="form-control" required>
+                <input type="number" name="price" min="1" id="price" class="form-control" value= <?=$datapro["price"]?> required>
             </div>
             <div class="form-group row mb-3">
                 <label for="quantity">Quantity</label>
-                <input type="number" name="quantity" id="quantity" min="0" max="999" class="form-control" required>
+                <input type="number" name="quantity" min="0" max="999" id="quantity" class="form-control" value= <?=$datapro["quantity"]?> required>
+            </div>
+            <div>
+                <label for="current-photo">Product Photo currently</label>
+                <img src="../../gearproduct/image/products/<?= $datapro['photo'] ?>" alt="photo" width="350px">
             </div>
             <div class="form-group row mb-3">
                 <label for="photo">Image</label>
@@ -57,11 +62,28 @@
             </div>
             <div class="form-group row mb-3">
                 <label for="detail">Detail</label>
-                <textarea type="file" name="detail" id="detail" class="form-control"></textarea>
+                <textarea type="file" name="detail" id="detail" class="form-control">
+                    <?= $datapro['detail'] ?>
+                </textarea>
             </div>
             <br>
-            <button type="submit" name="CreatePro" class="btn btn-outline-success btn-sm">Create</button>
+            <button type="submit" name="EditPro" class="btn btn-outline-success btn-sm">Edit</button>
         </form>
     </section>
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- using a wysiwyg editor the name is ckeditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+
+    <!-- script of wysiwyg must be put at the bottom of body html -->
+    <script>
+    ClassicEditor
+        .create( document.querySelector( '#detail' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+    </script>
 </body>
 </html>
