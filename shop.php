@@ -1,17 +1,20 @@
 <?php
     require('function.php');
+    require 'header.php';
 
-    $queryCategory = mysqli_query($connect,"SELECT products.id AS PID,
-                                            products_category.id AS PCID,
-                                            Name,
-                                            category_id,
-                                            price,
-                                            product,
-                                            quantity,
-                                            photo
-                                            FROM products INNER JOIN products_category 
-                                            ON category_id = products_category.id ORDER BY PID DESC LIMIT 5");
+    $iscategory = false;
+    if($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['category'])){
+        $iscategory = true;
+        $sql = "SELECT *, products.id AS PID, Name FROM products INNER JOIN products_category 
+        ON category_id = products_category.id
+        WHERE category_id = '$_GET[category]'";
+        $queryCat = mysqli_query($connect, $sql);
 
+        $countPro = mysqli_num_rows($queryCat);
+        // $data = mysqli_fetch_assoc($queryCat);
+        // print_r ($data);
+        // die();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +35,8 @@
 
         <div>
             <ul id="navbar">
-                <li><a class="active" href="marketplace.php">Home</a></li>
-                <li><a href="shop.php">Shop</a></li>
+                <li><a href="marketplace.php">Home</a></li>
+                <li><a class="active" href="shop.php">Shop</a></li>
                 <li><a href="forum.php">Forum</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -42,70 +45,60 @@
         </div>
     </section>
 
-    <section id="hero">
-        <h4>Marketplace Gaming Terbaik</h4>
-        <h2>Selling Good Items</h2>
-        <h1>For All Gaming Gear</h1>
-        <p>Jadilah Langganan Disini</p>
-        <button>Shop Now</button>
+    <section id="page-header">
+        <h2>#STAY GAMING</h2>
+        <p>Be Our Patrons</p>
     </section>
 
-    <section id="feature" class="section-p1">
-        <div class="fe-box">
-            <img src="images/features/f1.png" alt="">
-            <h6>Free Shipping</h6>
-        </div>
-        <div class="fe-box">
-            <img src="images/features/f2.png" alt="">
-            <h6>Online Order</h6>
-        </div>
-        <div class="fe-box">
-            <img src="images/features/f3.png" alt="">
-            <h6>Save Money</h6>
-        </div>
-        <div class="fe-box">
-            <img src="images/features/f4.png" alt="">
-            <h6>Promotion</h6>
-        </div>
-        <div class="fe-box">
-            <img src="images/features/f5.png" alt="">
-            <h6>Happy Sell</h6>
-        </div>
-        <div class="fe-box">
-            <img src="images/features/f6.png" alt="">
-            <h6>24/7 Support</h6>
+    <section class="container mt-2">
+        <div class="row">
+            <div>
+                <ul class="list-group text-center">
+                    <?= loadProductCategoryList() ?>
+                    <!-- <a href="shop.php?category=">
+                        <li class="list-group-item">An item</li>
+                    </a> -->
+                </ul>
+            </div>
         </div>
     </section>
 
     <section id="product1" class="section-p1">
-        <h2> Featured Product</h2>
-        <p> Gaming New Collection </p>
+        <h3 class="">product</h3>
         <div class="pro-container">
-            <?php while ( $data = mysqli_fetch_assoc($queryCategory)) { ?>
-            <div class="pro">
-                <div class="products-wrapper">
-                    <img src="../../gearproduct/image/products/<?= $data["photo"] ?>" alt="product image">
-                </div>
-                <div class="des">
-                    <span><?= $data["Name"] ?></span>
-                    <h4><?= $data["product"] ?></h4>
-                    <div class="des">
-                        <h6>stocks: <?= $data["quantity"] ?></h6>
+ 
+            <?php if ($iscategory == true): ?>
+                <?php if ($countPro <= 0): ?>
+                    <div class="alert alert-warning center-block" role="alert">
+                    The product you are looking for is not available
                     </div>
-                    <h4>RM<?= $data["price"] ?></h4>
-                </div>
-                <a href="productdetail.php?idpro=<?= $data['PID'] ?>"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
-            </div>
-
-            <?php } ?>
-
+                <?php endif; ?>
+                <?php while ($data = mysqli_fetch_assoc($queryCat)): ?>
+                    <div class="pro">
+                        <div class="products-wrapper">
+                            <img src="../../gearproduct/image/products/<?= $data['photo'] ?>" alt="product image">
+                        </div>
+                        <div class="des">
+                            <span><?= $data['Name'] ?></span>
+                            <h4><?= $data['product'] ?></h4>
+                            <div class="des">
+                                <h6>stocks:<?= $data['quantity'] ?></h6>
+                            </div>
+                            <h4>RM <?= $data['price'] ?></h4>
+                        </div>
+                        <a href="productdetail.php?idpro=<?= $data['PID'] ?>"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
+                    </div>
+                <?php endwhile;?>
+            <?php else:?>
+                <?php loadProductList();?>
+            <?php endif; ?>
             <!-- <div class="pro">
                 <div class="products-wrapper">
-                    <img src="images/product/ath-m50.png" alt="">
+                    <img src="images/product/product1.jpg" alt="">
                 </div>
                 <div class="des">
-                    <span>Audio Technica</span>
-                    <h5>Headphone</h5>
+                    <span>Logitech</span>
+                    <h5>Keyboard Gaming </h5>
                     <div class="star">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -117,44 +110,13 @@
                 </div>
                 <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
             </div> -->
-        
-        </div>
+        </div> 
     </section>
 
-    <section id="banner" class="section-m1"> 
-        <h4>Best Quality</h4>
-        <h2>Up to <span>70% OFF</span> - All Gaming Gear </h2>
-        <button class="normal">Explore More</button>
-    </section>
-
-    <section id="sm-banner" class="section-p1">
-        <div class="banner-box">
-            <h4>Hot Deals</h4>
-            <h2>Buy 1 Get 1 Free</h2>
-            <span>The Best Gaming Gear On Town</span>
-            <button class="white">Learn More</button>
-        </div>
-        <div class="banner-box banner-box2">
-            <h4>Crazy Deals</h4>
-            <h2>70% Discount </h2>
-            <span>The Best Gaming Gear On Town</span>
-            <button class="white">Collection</button>
-        </div>
-    </section>
-
-    <section id="banner3">
-        <div class="banner-box">
-            <h2>WINTER SALE </h2>
-            <h3>Winter Got Discount 70% OFF</h3>
-        </div>
-        <div class="banner-box banner-box2">
-            <h2>YELLOW SALE </h2>
-            <h3>40% OFF YELLOW GEAR </h3>
-        </div>
-        <div class="banner-box banner-box3">
-            <h2>SUMMER SALE </h2>
-            <h3> Got Discount 70% OFF</h3>
-        </div>
+    <section id="pagination" class="section-p1">
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#"><i class="fa-solid fa-arrow-right"></i></a>
     </section>
 
     <section id="newsletter" class="section-p1 section-m1">

@@ -20,17 +20,3 @@
     <link rel="stylesheet" href="assets/css/header.css">
   </head>
   <body>
-    <section id="header">
-        <img src="../images/GEAR_ARENA_v2_80x80.png" class="logo"alt="logo website">
-        <div>
-            <ul id="navbar">         
-                <li><a class="active" href="/geararena/adminpanel/index.php">Admin</a></li>
-                <li><a href="/geararena/marketplace.php">Home</a></li>
-                <li><a href="/geararena/shop.php">Shop</a></li>
-                <li><a href="/geararena/forum.php">Forum</a></li>
-                <li><a href="/geararena/about.html">About</a></li>
-                <li><a href="/geararena/contact.html">Contact</a></li>
-                <li><a href="/geararena/cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
-            </ul>
-        </div>
-    </section>

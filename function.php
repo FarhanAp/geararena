@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["login"])) {
     $password = mysqli_real_escape_string($connect, $_POST["pass"]);
 
     // query the email to see if there is a user
-    $sql = "SELECT * FROM users WHERE email='$email' limit 1";
+    $sql = "SELECT * FROM users WHERE email='$email' LIMIT 1";
     $query = mysqli_query($connect, $sql);
     $data = mysqli_fetch_assoc($query);
 
@@ -79,7 +79,7 @@ function logged_in(){
     return false;
 }
 
-// handle forum category
+// handle forum category list
 function loadForumCategoryList(){
     $con = opencon();
     $sql = "SELECT * FROM forum_category ORDER BY id DESC";
@@ -293,7 +293,7 @@ function loadComment($id)  {
 function editComment($commid){
     $con = opencon();
     $user_id = $_SESSION["id"];
-    $sql = "SELECT * FROM forum_comments WHERE id='$commid' limit 1";
+    $sql = "SELECT * FROM forum_comments WHERE id='$commid' LIMIT 1";
     $query = mysqli_query($con, $sql);
     $data = mysqli_fetch_assoc($query);
     $text = $data["text"];
@@ -326,7 +326,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
         echo '<script>document.location.href = "forum.php"</script>';
         return;
     } elseif ($type == 1) {
-        $sql = "UPDATE forum_comments SET text ='$txt' WHERE id = '$comment_id' limit 1";
+        $sql = "UPDATE forum_comments SET text ='$txt' WHERE id = '$comment_id' LIMIT 1";
         $query = mysqli_query($connect, $sql);
         if (isset($query)) {
             echo "<script>alert('Your comment was editted successfully')</script>";
@@ -335,7 +335,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["editing"])) {
     } 
     else{
         // edit the comment
-        $sql = "UPDATE forum_comments SET text ='$txt' WHERE user_id ='$user_id' && id = '$comment_id' limit 1";
+        $sql = "UPDATE forum_comments SET text ='$txt' WHERE user_id ='$user_id' && id = '$comment_id' LIMIT 1";
         $query = mysqli_query($connect, $sql);
         if (isset($query)) {
             echo "<script>alert('Your comment was editted successfully')</script>";
@@ -353,11 +353,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete_comment"])) {
     
 
     if ($type == 1) {
-        $sql = "DELETE FROM forum_comments WHERE id = '$commentId' limit 1";
+        $sql = "DELETE FROM forum_comments WHERE id = '$commentId' LIMIT 1";
         $query = mysqli_query($connect, $sql);
         
     } else {
-        $sql = "DELETE FROM forum_comments WHERE id = '$commentId' && user_id = '$userId' limit 1";
+        $sql = "DELETE FROM forum_comments WHERE id = '$commentId' && user_id = '$userId' LIMIT 1";
         $query = mysqli_query($connect, $sql);
     }
 
@@ -415,4 +415,128 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["commenting"])){
         </script>";
         echo mysqli_error($conn);
     }
+}
+
+// handle load product list
+function loadProductList() {
+    $con = opencon();
+    $sql = "SELECT products.id AS PID,
+    products_category.id AS PCID,
+    Name,
+    category_id,
+    price,
+    product,
+    quantity,
+    photo
+    FROM products INNER JOIN products_category 
+    ON category_id = products_category.id";
+    $queryCategory = mysqli_query($con, $sql);
+
+    while ( $data = mysqli_fetch_assoc($queryCategory)) {
+        $idpro = $data['PID'];
+        $photo = $data['photo'];
+        $category = $data['Name'];
+        $product = $data['product'];
+        $quantity = $data['quantity'];
+        $price = $data['price'];
+
+        echo "<div class=\"pro\">
+            <div class=\"products-wrapper\">
+                <img src=\"../../gearproduct/image/products/$photo\" alt=\"product image\">
+            </div>
+            <div class=\"des\">
+                <span>$category]</span>
+                <h4>$product</h4>
+                <div class=\"des\">
+                    <h6>stocks:$quantity</h6>
+                </div>
+                <h4>RM $price</h4>
+            </div>
+            <a href=\"productdetail.php?idpro=$idpro\"><i class=\"fa-solid fa-cart-shopping\" style=\"color: #088178;\"></i></a>
+        </div>";
+    }
+}
+
+// handle load product category list
+function loadProductCategoryList() {
+    $con = opencon();
+    $sql = "SELECT * FROM products_category";
+    $query = mysqli_query($con, $sql);
+
+    while ( $data = mysqli_fetch_assoc($query)){
+        $cid = $data["id"];
+        $cname = $data["Name"];
+        echo "<a href=\"shop.php?category=$cid\" style=\"text-decoration: none;\">
+                <li class=\"list-group-item\">$cname</li>
+            </a>";
+    }
+}
+
+function loadProductDetail($pid) {
+    $con = opencon();
+    $sql = "SELECT *, products.id AS PID, Name FROM products INNER JOIN products_category 
+    ON category_id = products_category.id WHERE products.id='$pid' ";
+    $query = mysqli_query($con, $sql);
+
+    if (mysqli_num_rows($query) > 0) {
+        $data = mysqli_fetch_assoc($query);
+        $photo = $data["photo"];
+        $category_name = $data["Name"];
+        $product = $data["product"];
+        $price = $data["price"];
+        $quantity = $data["quantity"];
+        $detail = htmlspecialchars_decode($data["detail"]);
+        echo
+        "<form action=\"cart.html\" method=\"post\">
+        <div class=\"single-pro-image\">
+        <img src=\"../../gearproduct/image/products/$photo\" width=\"100%\" id=\"MainImg\" alt=\"product\">
+        </div>
+        
+        
+            <div class=\"single-pro-details\">
+                <h5 class=\"fw-bold\">$category_name</h5>
+                <h2>$product</h2>
+                <h3>RM $price</h3>
+                <h5>Stock: $quantity</h5>
+                <input type=\"number\" value=\"1\" max=\"$quantity\">
+                <button type=\"submit\" class=\"normal\">Add To Cart</button>
+                <h4>Product Details</h4>
+                <span class=\"fw-bold\">$detail
+                </span>
+            </div>
+        </form>"
+        ;
+    } else {
+        echo "data unavailable or error";
+    }
+}
+
+function loadFeaturedProducts() {
+    $con = opencon();
+    $sql = "SELECT * FROM products";
+    $query = mysqli_query($con, $sql);
+
+    // if (mysqli_num_rows($query)  != null) {
+        while ($data = mysqli_fetch_assoc($query)) {
+            $data = mysqli_fetch_assoc($query);
+            $pid = $data["id"];
+            $photo = $data["photo"];
+            $product = $data["product"];
+            $price = $data["price"];
+            $quantity = $data["quantity"];
+            $detail = htmlspecialchars_decode($data["detail"]);
+            echo"
+            <div class=\"pro\">
+                <div class=\"products-wrapper\">
+                    <img src=\"../../gearproduct/image/products/$photo\" alt=\"featured-products-images\">
+                </div>
+                <div class=\"des\">
+                    <h5>$product</h5>
+                    <h5>Stock: $quantity</h5>
+                    <h4>RM $price</h4>
+                </div>
+                <a href=\"productdetail.php?idpro=$pid\"><i class=\"fa-solid fa-cart-shopping\" style=\"color: #088178;\"></i></a>
+            </div>";
+        }
+    // }
 }

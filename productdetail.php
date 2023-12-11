@@ -1,3 +1,9 @@
+<?php
+    require('function.php');
+    require 'header.php';
+    // $_GET["idpro"];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +23,7 @@
         <div>
             <ul id="navbar">
                 <li><a href="marketplace.php">Home</a></li>
-                <li><a class="active" href="shop.html">Shop</a></li>
+                <li><a class="active" href="shop.php">Shop</a></li>
                 <li><a href="forum.php">Forum</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -27,10 +33,11 @@
     </section>
 
     <section id="prodetails" class="section-p1">
-        <div class="single-pro-image">
-            <img src="images/product/product1.jpg" width="100%" id="MainImg" alt="">
+        <?= loadProductDetail($_GET["idpro"])?>
+        <!-- <div class="single-pro-image">
+            <img src="images/product/product1.jpg" width="100%" id="MainImg" alt=""> -->
 
-            <div class="small-img-group">
+            <!-- <div class="small-img-group">
                 <div class="small-img-col">
                     <img src="images/product/product1.jpg" width="100%" class="small-img" alt="">
                 </div>
@@ -43,10 +50,10 @@
                 <div class="small-img-col">
                     <img src="images/product/product1(4).jpg" width="100%" class="small-img" alt="">
                 </div>
-            </div>
-        </div>
+            </div> 
+        </div> -->
 
-        <div class="single-pro-details">
+        <!-- <div class="single-pro-details">
             <h6>LOGITECH G213</h6>
             <h4>KEYBOARD GAMING</h4>
             <h2>RM220</h2>
@@ -65,88 +72,33 @@
                  to deliver a superior tactile response and overall performance profile similar to a mechanical keyboard. 
                  Mech-Dome keys are full height, deliver a full 4 mm travel distance, 50 g actuation force, and a quiet sound operation.
             </span>
-        </div>
+        </div> -->
     </section>
 
     <section id="product1" class="section-p1">
         <h2> Featured Product</h2>
         <p> Gaming New Collection </p>
         <div class="pro-container">
-            <div class="pro">
-                <div class="products-wrapper">
-                    <img src="images/product/product1.jpg" alt="">
-                </div>
-                <div class="des">
-                    <span>Logitech</span>
-                    <h5>Keyboard Gaming </h5>
-                    <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+            <?= loadFeaturedProducts()?>
+                <!-- <div class="pro">
+                    <div class="products-wrapper">
+                        <img src="images/product/product1.jpg" alt="">
                     </div>
-                    <h4>RM220</h4>
-                </div>
-                <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
-            </div>
-            <div class="pro">
-                <div class="products-wrapper">
-                    <img src="images/product/ath-m50.png" alt="">
-                </div>
-                <div class="des">
-                    <span>Audio Technica</span>
-                    <h5>Headphone</h5>
-                    <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+                    <div class="des">
+                        <span>Logitech</span>
+                        <h5>Keyboard Gaming </h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>RM220</h4>
                     </div>
-                    <h4>RM220</h4>
-                </div>
-                <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
-            </div>
-        
-        
-            <div class="pro">
-                <img src="images/product/proudct3" alt="">
-                <div class="des">
-                    <span>KOORUI</span>
-                    <h5>Monitor Gaming Gear </h5>
-                    <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>RM320</h4>
-                </div>
-                <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
-            </div>
-        
-        
-            <div class="pro">
-                <img src="images/product/product4.jpg" alt="">
-                <div class="des">
-                    <span>MSI RTX 4090</span>
-                    <h5>VGA </h5>
-                    <div class="star">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h4>RM3000</h4>
-                </div>
-                <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
-            </div>
-        </div>
-        
-        
+                    <a href="#"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
+                </div> -->
+        </div>     
     </section>
 
     <section id="newsletter" class="section-p1 section-m1">
@@ -214,7 +166,7 @@
         </div>
     </footer>
 
-    <script>
+    <!-- <script>
         var MainImg = document.getElementById("MainImg");
         var smallimg = document.getElementsByClassName("small-img");
 
@@ -230,8 +182,7 @@
         smallimg[3].onclick = function(){
             MainImg.src = smallimg[3].src;
         }
-    </script>
-
+    </script> -->
 
 
     <script src="script.js"></script>

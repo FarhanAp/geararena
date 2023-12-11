@@ -6,6 +6,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["EditProduct"])) {
         $id = $_POST["PID"];
         $product = $_POST["PName"];
+        $currentphoto = $_POST["Pphoto"];
         $queryProduct = mysqli_query($connect,
                                         "SELECT products.*, products_category.Name AS cname
                                         FROM products INNER JOIN products_category
@@ -29,6 +30,7 @@
         <h5>Edit A Product</h5>
         <form action="functionadmin.php" method="post" enctype="multipart/form-data" autocomplete="off">
             <input type="hidden" name="PID" value="<?= $id ?>">
+            <input type="hidden" name="Loadedphoto" value="<?= $currentphoto ?>">
             <div class="form-group row mb-3">
                 <label for="Editproduct">Product Name</label>
                 <input type="text" name="Editproduct" id="Editproduct" class="form-control" value="<?= $product ?>" required>
