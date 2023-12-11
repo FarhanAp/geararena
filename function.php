@@ -487,12 +487,11 @@ function loadProductDetail($pid) {
         $quantity = $data["quantity"];
         $detail = htmlspecialchars_decode($data["detail"]);
         echo
-        "<form action=\"cart.html\" method=\"post\">
-        <div class=\"single-pro-image\">
-        <img src=\"../../gearproduct/image/products/$photo\" width=\"100%\" id=\"MainImg\" alt=\"product\">
-        </div>
-        
-        
+        "<div class=\"single-pro-image\">
+        <form action=\"cart.html\" method=\"post\">
+                <img src=\"../../gearproduct/image/products/$photo\" width=\"100%\" id=\"MainImg\" alt=\"product\">
+            </div>
+ 
             <div class=\"single-pro-details\">
                 <h5 class=\"fw-bold\">$category_name</h5>
                 <h2>$product</h2>
@@ -503,8 +502,8 @@ function loadProductDetail($pid) {
                 <h4>Product Details</h4>
                 <span class=\"fw-bold\">$detail
                 </span>
-            </div>
-        </form>"
+                </form>
+                </div>"
         ;
     } else {
         echo "data unavailable or error";
