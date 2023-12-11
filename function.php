@@ -512,13 +512,16 @@ function loadProductDetail($pid) {
 
 function loadFeaturedProducts() {
     $con = opencon();
-    $sql = "SELECT * FROM products";
+    $sql = "SELECT *, products.id AS PID,
+    products_category.id AS PCID,
+    Name
+    FROM products INNER JOIN products_category 
+    ON category_id = products_category.id ORDER BY products.id DESC";
     $query = mysqli_query($con, $sql);
 
     // if (mysqli_num_rows($query)  != null) {
         while ($data = mysqli_fetch_assoc($query)) {
-            $data = mysqli_fetch_assoc($query);
-            $pid = $data["id"];
+            $pid = $data["PID"];
             $photo = $data["photo"];
             $product = $data["product"];
             $price = $data["price"];
