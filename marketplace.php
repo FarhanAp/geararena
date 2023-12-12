@@ -1,5 +1,6 @@
 <?php
     require('function.php');
+    // require 'header.php';
 
     $queryCategory = mysqli_query($connect,"SELECT products.id AS PID,
                                             products_category.id AS PCID,
@@ -20,8 +21,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gear Arena Marketplace</title>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
     <link rel="stylesheet" href="marketplace.css">
 </head>
 
@@ -37,7 +45,14 @@
                 <li><a href="forum.php">Forum</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <li><a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <?php if(logged_in()):?>
+                <form action="function.php" method="post">
+                    <li><button type="submit" name="logout" class="btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button></li>
+                </form>
+                <?php else:?>
+                <li><a href="login.php"><i class="fa-regular fa-user"></i></a></li>
+                <?php endif;?>
             </ul>
         </div>
     </section>
@@ -46,7 +61,7 @@
         <h4>Marketplace Gaming Terbaik</h4>
         <h2>Selling Good Items</h2>
         <h1>For All Gaming Gear</h1>
-        <p>Jadilah Langganan Disini</p>
+        <p>BE OUR PATRONS</p>
         <button>Shop Now</button>
     </section>
 
@@ -77,26 +92,41 @@
         </div>
     </section>
 
+    
     <section id="product1" class="section-p1">
         <h2> Featured Product</h2>
         <p> Gaming New Collection </p>
         <div class="pro-container">
             <?php while ( $data = mysqli_fetch_assoc($queryCategory)) { ?>
-            <div class="pro">
-                <div class="products-wrapper">
-                    <img src="../../gearproduct/image/products/<?= $data["photo"] ?>" alt="product image">
-                </div>
-                <div class="des">
+            <form action="cart.php?idpro=<?= $data["PID"]?>" method="post">
+
+                <div class="pro">
+
+                    <div class="products-wrapper" >
+                    <a href="productdetail.php?idpro=<?= $data["PID"] ?>">
+                        <img src="../../gearproduct/image/products/<?= $data["photo"] ?>" alt="product image">
+                    </a>
+                    </div>
+                    
+                    <div class="des">
                     <span><?= $data["Name"] ?></span>
                     <h4><?= $data["product"] ?></h4>
-                    <div class="des">
-                        <h6>stocks: <?= $data["quantity"] ?></h6>
-                    </div>
+                        <div class="des">
+                            <h6>stocks: <?= $data["quantity"] ?></h6>
+                        </div>
                     <h4>RM<?= $data["price"] ?></h4>
+                    </div> 
+                    
+                    <input type="hidden" name="photo" value="../../gearproduct/image/products/<?= $data["photo"] ?>" class="form-control">
+                    <input type="hidden" name="product" value="<?=$data["product"]?>" class="form-control">
+                    <input type="hidden" name="price" value="<?=$data["price"]?>" class="form-control">
+                    <input type="hidden" name="quantity" value="1"  class="form-control">
+                    
+                    <button class="btn" type="submit" name="add_to_cart"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></button>
+                    
+      
                 </div>
-                <a href="productdetail.php?idpro=<?= $data['PID'] ?>"><i class="fa-solid fa-cart-shopping" style="color: #088178;"></i></a>
-            </div>
-
+            </form>
             <?php } ?>
 
             <!-- <div class="pro">

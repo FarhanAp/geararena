@@ -1,3 +1,64 @@
+<?php 
+    require 'function.php';
+    require 'header.php';
+
+    $total = 0;
+
+    if (!isset($_SESSION["id"])) {
+        echo "<script> 
+                document.location.href = 'marketplace.php'
+            </script>";
+    }
+
+    if (isset($_POST["add_to_cart"])) {
+        if (isset($_SESSION["cart"])) {
+            $session_array_id = array_column($_SESSION['cart'],"id");
+
+            if (!in_array($_GET['idpro'], $session_array_id)) {
+                $session_array = array(
+                    "idpro" => $_GET['idpro'],
+                    "photo" => $_POST['photo'],
+                    "product" => $_POST['product'],
+                    "price" => $_POST['price'],
+                    "quantity" => $_POST['quantity'],
+                );
+                $_SESSION['cart'][] = $session_array;
+            }
+        } else {
+            $session_array = array(
+                "idpro" => $_GET['idpro'],
+                "photo" => $_POST['photo'],
+                "product" => $_POST['product'],
+                "price" => $_POST['price'],
+                "quantity" => $_POST['quantity'],
+            );
+            $_SESSION['cart'][] = $session_array;
+        }
+        echo "<pre>";
+        print_r($_SESSION);
+        echo "</pre>";
+    }
+
+    if (isset($_GET['action'])) {
+        if ($_GET['action'] == "remove") {
+
+            foreach ($_SESSION['cart'] as $key => $value) {
+
+                // echo "<pre>";
+                // print_r ($value);
+                // echo "</pre>";
+                
+                if ($value["idpro"] == $_GET["idpro"]) {
+                    // echo "<pre>";
+                    // print_r ($key);
+                    // echo "</pre>";
+                    unset($_SESSION['cart'][$key]);
+                }
+            }
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,15 +82,17 @@
                 <li><a href="forum.php">Forum</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a class="active" href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <li><a class="active" href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
             </ul>
         </div>
     </section>
 
     <section id="page-header">
         <h2>#STAY GAMING</h2>
-        <p>Jadilah Langganan Disini</p>
+        <p>Be Our Patrons</p>
     </section>
+
+<form action="payment.php" method="post">
 
     <section id="cart" class="section-p1">
         <table width="100%">
@@ -44,49 +107,41 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <?php if (isset($_SESSION['cart'])):?>
+                    <?php foreach ($_SESSION['cart'] as $key => $value) { ?>
+                        <tr>
+                            <td><a href="cart.php?action=remove&idpro=<?=$value["idpro"]?>"><i class="far fa-times-circle"></i></a></td>
+                            <td><img src="<?=$value["photo"]?>" alt=""></td>
+                            
+                            <td><?=$value["product"]?></td>
+                            <td>RM<?=$value["price"]?></td>
+                            <td><input type="number" readonly value="<?=$value["quantity"]?>"></td>
+                            <td>RM <?=number_format($value["price"] * $value["quantity"], 2)?></td>
+                        </tr>
+                        
+                        
+                        <?php $total = $total + $value["quantity"] * $value["price"]; } ?>
+                <?php endif; ?>
+                <!-- <tr>
                     <td><a href="#"><i class="far fa-times-circle"></i></a></td>
                     <td><img src="images/product/product1.jpg" alt=""></td>
                     <td>Logitech Keyboard G213</td>
                     <td>RM220</td>
-                    <td><input type="number" value="1"></td>
+                    <td><input type="number" readonly value="1"></td>
                     <td>RM220</td>
-                </tr>
-                <tr>
-                    <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                    <td><img src="images/product/product1.jpg" alt=""></td>
-                    <td>Logitech Keyboard G213</td>
-                    <td>RM220</td>
-                    <td><input type="number" value="1"></td>
-                    <td>RM220</td>
-                </tr>
-                <tr>
-                    <td><a href="#"><i class="far fa-times-circle"></i></a></td>
-                    <td><img src="images/product/product1.jpg" alt=""></td>
-                    <td>Logitech Keyboard G213</td>
-                    <td>RM220</td>
-                    <td><input type="number" value="1"></td>
-                    <td>RM220</td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </section>
 
     <section id="cart-add" class="section-p1">
-        <div id="coupon">
-            <h3>Apply Coupon</h3>
-        <div>
-            <input type="text" placeholder="Enter Your Coupon">
-            <button class="normal">Apply</button>
-            </div>
-        </div>
 
         <div id="subtotal">
             <h3>Cart Totals</h3>
             <table>
                <tr>
                     <td>Cart Subtotal</td>
-                    <td>RM660</td>
+                    <td>RM <?= $total ?></td>
                </tr>
                <tr>
                     <td>Shipping</td>
@@ -94,13 +149,16 @@
                </tr>
                <tr>
                     <td><strong>TOTAL</strong></td>
-                    <td><strong>RM660</strong></td>
+                    <td><strong>RM <?= $total ?></strong></td>
                </tr> 
             </table>
-            <button class="normal">Proceed to checkout</button>
+
+            
+            <input type="hidden" name="total" value="<?=$total?>" class="form-control">
+            <button type="submit" class="normal" name="checkout">Proceed to checkout</button>
         </div>
     </section>
-
+</form>
     <footer class="section-p1">
         <div class="col">
             <img class="logo" src="images/GEAR_ARENA_v2_80x80.png" alt="">

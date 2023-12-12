@@ -79,6 +79,20 @@ function logged_in(){
     return false;
 }
 
+// handle log out
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["logout"])) {
+
+    session_destroy();
+    echo "<script>
+            alert('succesfully logout')
+        </script>",
+        "<script>
+            document.location.href = 'marketplace.php'
+        </script>";
+    // header("Location:marketplace.php");
+    exit;
+}
+
 // handle forum category list
 function loadForumCategoryList(){
     $con = opencon();
@@ -488,23 +502,27 @@ function loadProductDetail($pid) {
         $detail = htmlspecialchars_decode($data["detail"]);
         echo
         "<div class=\"single-pro-image\">
-        <form action=\"cart.html\" method=\"post\">
-                <img src=\"../../gearproduct/image/products/$photo\" width=\"100%\" id=\"MainImg\" alt=\"product\">
-            </div>
+        <form action=\"cart.php?idpro=$pid\" method=\"post\">
+            <img src=\"../../gearproduct/image/products/$photo\" width=\"100%\" id=\"MainImg\" alt=\"product\">
+        </div>
  
             <div class=\"single-pro-details\">
                 <h5 class=\"fw-bold\">$category_name</h5>
                 <h2>$product</h2>
                 <h3>RM $price</h3>
                 <h5>Stock: $quantity</h5>
-                <input type=\"number\" value=\"1\" max=\"$quantity\">
-                <button type=\"submit\" class=\"normal\">Add To Cart</button>
+                <input type=\"number\" name=\"quantity\" value=\"1\" max=\"$quantity\" required>
+                <button type=\"submit\" class=\"normal\" name=\"add_to_cart\">Add To Cart</button>
                 <h4>Product Details</h4>
-                <span class=\"fw-bold\">$detail
+                <span class=\"fw-bold\">
+                    $detail
                 </span>
-                </form>
-                </div>"
-        ;
+
+                <input type=\"hidden\" name=\"photo\" value=\"../../gearproduct/image/products/$photo\" class=\"form-control\">
+                <input type=\"hidden\" name=\"product\" value=\"$product\" class=\"form-control\">
+                <input type=\"hidden\" name=\"price\" value=\"$price\" class=\"form-control\">
+            </div>
+        </form>";
     } else {
         echo "data unavailable or error";
     }

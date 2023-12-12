@@ -31,7 +31,7 @@
                 <li><a class="active" href="forum.php">Forum</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <li><a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
             </ul>
         </div>
     </section>

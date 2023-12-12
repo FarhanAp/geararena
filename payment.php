@@ -1,3 +1,18 @@
+<?php 
+    require 'function.php';
+
+    if (isset($_POST["checkout"])) {
+        echo "<pre>";
+        print_r($_POST);
+        echo "</pre>";
+        echo"<br>";
+        echo "<pre>";
+        print_r($_SESSION);
+        echo "</pre>";
+
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +28,23 @@
 
 <div class="container">
 
-    <form action="">
+<section id="header">
+        <a href="#"><img src="images/GEAR_ARENA_v2_80x80.png" class="logo"alt=""></a>
 
+        <div>
+            <ul id="navbar">
+                <li><a href="marketplace.php">Home</a></li>
+                <li><a href="shop.php">Shop</a></li>
+                <li><a href="forum.php">Forum</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a class="active" href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+            </ul>
+        </div>
+    </section>
+
+
+    <form action="">
         <div class="row">
 
             <div class="col">
@@ -31,21 +61,21 @@
                 </div>
                 <div class="inputBox">
                     <span>address :</span>
-                    <input type="text" placeholder="room - street - locality">
+                    <input type="text" placeholder="No - Street">
                 </div>
                 <div class="inputBox">
                     <span>city :</span>
-                    <input type="text" placeholder="jakarta">
+                    <input type="text" placeholder="Subang Jaya">
                 </div>
 
                 <div class="flex">
                     <div class="inputBox">
                         <span>state :</span>
-                        <input type="text" placeholder="indonesia">
+                        <input type="text" placeholder="Selangor">
                     </div>
                     <div class="inputBox">
-                        <span>zip code :</span>
-                        <input type="text" placeholder="123 456">
+                        <span>post code :</span>
+                        <input type="text" placeholder="47500">
                     </div>
                 </div>
 
