@@ -8,11 +8,11 @@
     $total;
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["checkout"])) {
         $total = $_POST["total"];
-        echo"$total";
-        echo"<br>";
-        echo "<pre>";
-        print_r($_SESSION['cart']);
-        echo "</pre>";
+        // echo"$total";
+        // echo"<br>";
+        // echo "<pre>";
+        // print_r($_SESSION['cart']);
+        // echo "</pre>";
     }
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
@@ -28,17 +28,17 @@
         array_push($price, $value['price']);
     }
 
-    echo "<pre>";
-    print_r($_SESSION['username']);
-    echo "</pre>";
+    // echo "<pre>";
+    // print_r($_SESSION['username']);
+    // echo "</pre>";
 
-    print_r($idpro);
-    echo"<br>";
-    print_r($pro_name);
-    echo"<br>";
-    print_r($quantity);
-    echo"<br>";
-    print_r($price);
+    // print_r($idpro);
+    // echo"<br>";
+    // print_r($pro_name);
+    // echo"<br>";
+    // print_r($quantity);
+    // echo"<br>";
+    // print_r($price);
 ?>
 
 <!DOCTYPE html>
@@ -65,12 +65,25 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a class="active" href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <?php if(logged_in()):?>
+                <form action="function.php" method="post">
+                    <li><button type="submit" name="logout" class="btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button></li>
+                </form>
+                <?php else:?>
+                <li><a href="login.php"><i class="fa-regular fa-user"></i></a></li>
+                <?php endif;?>
             </ul>
         </div>
     </section>
 
 
-    <form action="function.php" method="post">
+   
+
+</div>  
+
+
+<div class="card-payment"> 
+<form action="function.php" method="post">
         <div class="row">
             <div class="col">
                 <h3 class="title">billing address</h3>
@@ -147,8 +160,9 @@
             <input type="hidden" name="total" value="<?=$total?>">
         <button type="submit" name="payment" class="submit-btn">proceed to payment</button>
     </form>
+</div>
 
-</div>    
+
     
 </body>
 </html>

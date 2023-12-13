@@ -611,7 +611,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
 
             $sqlOrderItem = "INSERT INTO order_items (order_id, product_id, quantity, single_price) 
                             VALUES ('$orderId', '$productId', '$quantity', '$price')";
-            $queryOrderItem = mysqli_query($connect, $sqlOrderItem);     
+            $queryOrderItem = mysqli_query($connect, $sqlOrderItem);
+
+            // if ($queryOrderItem) {
+            //     $sqlUpdateStock = "SELECT quantity FROM products WHERE id ='$productId' LIMIT 1";
+            //     $queryCheckStock = mysqli_query($connect, $sqlUpdateStock);
+            //     $dataCheck = mysqli_fetch_assoc($queryCheckStock);
+            //     $qttCheck = $dataCheck["quantity"];
+            //     $qttCheck = $qttCheck - $quantity;
+            //     $sqlUpdateStock = "UPDATE products SET quantity ='$qttCheck' WHERE id = '$productId' LIMIT 1";
+            // }
         }
     }
 

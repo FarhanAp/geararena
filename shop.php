@@ -41,6 +41,13 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
+                <?php if(logged_in()):?>
+                <form action="function.php" method="post">
+                    <li><button type="submit" name="logout" class="btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button></li>
+                </form>
+                <?php else:?>
+                <li><a href="login.php"><i class="fa-regular fa-user"></i></a></li>
+                <?php endif;?>
             </ul>
         </div>
     </section>
