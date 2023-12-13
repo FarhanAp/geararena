@@ -203,7 +203,7 @@
         <div class="col">
             <img class="logo" src="images/GEAR_ARENA_v2_80x80.png" alt="">
             <h4> Contact</h4>
-            <p><strong>Address: </strong> Jalan Mayor Oking Citeureup Bogor</p>
+            <p><strong>Address: </strong> Jalan SS 15 SUBANG JAYA, SELANGOR</p>
             <p><strong>Phone:</strong>+62 85933659692</p>
             <p><strong>Hours:</strong> 10:00 - 21:00, Mon - Sat</p>
             <div class="follow">
