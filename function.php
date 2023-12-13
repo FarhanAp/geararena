@@ -539,7 +539,7 @@ function loadFeaturedProducts() {
     ON category_id = products_category.id ORDER BY products.id DESC";
     $query = mysqli_query($con, $sql);
 
-    // if (mysqli_num_rows($query)  != null) {
+    if (mysqli_num_rows($query)  != null) {
         while ($data = mysqli_fetch_assoc($query)) {
             $pid = $data["PID"];
             $photo = $data["photo"];
@@ -560,5 +560,76 @@ function loadFeaturedProducts() {
                 <a href=\"productdetail.php?idpro=$pid\"><i class=\"fa-solid fa-cart-shopping\" style=\"color: #088178;\"></i></a>
             </div>";
         }
+    }
+}
+
+// handle payment 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
+    echo "<pre>";
+    print_r($_POST);
+    echo "</pre>";
+
+    $uid = $_SESSION["id"];
+    $state = $_POST["state"];
+    $city = $_POST["city"];
+    $address = $_POST["address"];
+    $post_code = $_POST["postCode"];
+    $legal_name = $_POST["legalName"];
+    $cc_number = $_POST["ccNumber"];
+    $cvv = $_POST["cvv"];
+    $exp_year = $_POST["expYear"];
+    $exp_month = $_POST["expMonth"];
+    $total = $_POST["total"];
+    $date = date("Y-m-d H:i:s");
+    
+    $sqlOrder = "INSERT INTO orders (user_id, state, city, address, post_code, legal_name, cc_number, cvv, expired_year, expired_month, total, created_at) 
+                VALUES ('$uid',
+                        '$state',
+                        '$city',
+                        '$address',
+                        '$post_code',
+                        '$legal_name',
+                        '$cc_number',
+                        '$cvv',
+                        '$exp_year',
+                        '$exp_month',
+                        '$total',
+                        '$date')";
+
+    $queryOrder = mysqli_query($connect, $sqlOrder);
+
+    if ($queryOrder) {
+        $sqlOrderCall = "SELECT * FROM orders WHERE user_id = '$uid' ORDER BY order_id DESC LIMIT 1";
+        $queryOrderCall = mysqli_query($connect, $sqlOrderCall);
+        $dataCall = mysqli_fetch_assoc($queryOrderCall);
+        $orderId = $dataCall["order_id"];
+
+        for ($i=0; $i < count($_POST["idpro"]); $i++) { 
+            $productId = $_POST["idpro"][$i];
+            $quantity = $_POST["quantity"][$i];
+            $price = $_POST["price"][$i];
+
+            $sqlOrderItem = "INSERT INTO order_items (order_id, product_id, quantity, single_price) 
+                            VALUES ('$orderId', '$productId', '$quantity', '$price')";
+            $queryOrderItem = mysqli_query($connect, $sqlOrderItem);     
+        }
+    }
+
+    // for ($i=0; $i < count($_POST["idpro"]); $i++) { 
+    //     $productId = $_POST["idpro"][$i];
+    //     $productName = $_POST["product"][$i];
+    //     $quantity = $_POST["quantity"][$i];
+    //     $price = $_POST["price"][$i];
+        
+    //     echo "<pre>";
+    //     print_r ($productId); 
+    //     echo "<br>";
+    //     print_r ($productName);
+    //     echo "<br>";
+    //     print_r ($quantity); 
+    //     echo "<br>";
+    //     print_r ($price);
+    //     echo "</pre>";
     // }
+
 }

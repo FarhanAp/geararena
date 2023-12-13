@@ -4,6 +4,7 @@
     $idpro = array();
     $pro_name = array();
     $quantity = array();
+    $price = array();
     $total;
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["checkout"])) {
         $total = $_POST["total"];
@@ -24,6 +25,7 @@
         array_push($idpro, $value['idpro']);
         array_push($pro_name, $value['product']);
         array_push($quantity, $value['quantity']);
+        array_push($price, $value['price']);
     }
 
     echo "<pre>";
@@ -35,6 +37,8 @@
     print_r($pro_name);
     echo"<br>";
     print_r($quantity);
+    echo"<br>";
+    print_r($price);
 ?>
 
 <!DOCTYPE html>
@@ -66,7 +70,7 @@
     </section>
 
 
-    <form action="payment.php" method="post">
+    <form action="function.php" method="post">
         <div class="row">
             <div class="col">
                 <h3 class="title">billing address</h3>
@@ -117,7 +121,7 @@
                 </div>
                 <div class="inputBox">
                     <span>expired month :</span>
-                    <input type="text" name="expmonth" placeholder="january">
+                    <input type="text" name="expMonth" placeholder="january">
                 </div>
 
                 <div class="flex">
@@ -136,8 +140,11 @@
         <?php for ($i=0; $i < count($pro_name); $i++) { ?>
             <input type="hidden" name="idpro[]" value="<?=$idpro[$i]?>">
             <input type="hidden" name="product[]" value="<?=$pro_name[$i]?>">
-    
-        <?php } ?>
+            <input type="hidden" name="quantity[]" value="<?=$quantity[$i]?>">
+            <input type="hidden" name="price[]" value="<?=$price[$i]?>">
+            
+            <?php } ?>
+            <input type="hidden" name="total" value="<?=$total?>">
         <button type="submit" name="payment" class="submit-btn">proceed to payment</button>
     </form>
 
