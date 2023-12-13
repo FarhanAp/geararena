@@ -613,14 +613,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
                             VALUES ('$orderId', '$productId', '$quantity', '$price')";
             $queryOrderItem = mysqli_query($connect, $sqlOrderItem);
 
-            // if ($queryOrderItem) {
-            //     $sqlUpdateStock = "SELECT quantity FROM products WHERE id ='$productId' LIMIT 1";
-            //     $queryCheckStock = mysqli_query($connect, $sqlUpdateStock);
-            //     $dataCheck = mysqli_fetch_assoc($queryCheckStock);
-            //     $qttCheck = $dataCheck["quantity"];
-            //     $qttCheck = $qttCheck - $quantity;
-            //     $sqlUpdateStock = "UPDATE products SET quantity ='$qttCheck' WHERE id = '$productId' LIMIT 1";
-            // }
+            if ($queryOrderItem) {
+                $sqlCheckStock = "SELECT quantity FROM products WHERE id ='$productId' LIMIT 1";
+                $queryCheckStock = mysqli_query($connect, $sqlCheckStock);
+                $dataCheck = mysqli_fetch_assoc($queryCheckStock);
+                $qttCheck = $dataCheck["quantity"];
+                $qttCheck = $qttCheck - $quantity;
+
+                $sqlUpdateStock = "UPDATE products SET quantity ='$qttCheck' WHERE id = '$productId' LIMIT 1";
+                $queryUpdateStock = mysqli_query($connect, $sqlUpdateStock);
+
+                if ($queryUpdateStock) {
+                    echo "<script>
+                            alert('succesfully purchased')
+                        </script>",
+                        "<script>
+                            document.location.href = 'marketplace.php'
+                        </script>";
+                }
+            }
         }
     }
 
