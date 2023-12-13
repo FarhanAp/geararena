@@ -19,7 +19,7 @@ if(isset($_GET['user']))
 <body>
       
     <div class="container">
-       <div class="box">
+       <div class="box login">
         <div class="header">
             <header><img src="images/logo.png" alt=""></header>
             <p>Log In to Gear Arena</p>

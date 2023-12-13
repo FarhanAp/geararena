@@ -68,6 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["login"])) {
         } else {
             header("Location: login.php?user=notFound");
         }
+    } else {
+        header("Location: login.php?user=notFound");
     }
 }
 
