@@ -445,7 +445,7 @@ function loadProductList() {
     quantity,
     photo
     FROM products INNER JOIN products_category 
-    ON category_id = products_category.id";
+    ON category_id = products_category.id WHERE quantity != 0";
     $queryCategory = mysqli_query($con, $sql);
 
     while ( $data = mysqli_fetch_assoc($queryCategory)) {
@@ -628,7 +628,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
                             alert('succesfully purchased')
                         </script>",
                         "<script>
-                            document.location.href = 'marketplace.php'
+                            document.location.href = 'orderpage.php?orderid=$orderId'
                         </script>";
                 }
             }

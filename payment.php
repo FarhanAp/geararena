@@ -95,22 +95,22 @@
 
                 <div class="inputBox">
                     <span>address :</span>
-                    <input type="text" name="address" placeholder="No - Street">
+                    <input type="text" name="address" placeholder="No - Street" required>
                 </div>
 
                 <div class="inputBox">
                     <span>city :</span>
-                    <input type="text" name="city" placeholder="Subang Jaya">
+                    <input type="text" name="city" placeholder="Subang Jaya" required>
                 </div>
 
                 <div class="flex">
                     <div class="inputBox">
                         <span>state :</span>
-                        <input type="text" name="state" placeholder="Selangor">
+                        <input type="text" name="state" placeholder="Selangor" required>
                     </div>
                     <div class="inputBox">
                         <span>post code :</span>
-                        <input type="text" name="postCode" placeholder="47500">
+                        <input type="text" name="postCode" placeholder="47500" required>
                     </div>
                 </div>
 
@@ -126,25 +126,25 @@
                 </div>
                 <div class="inputBox">
                     <span>name on card :</span>
-                    <input type="text" name="legalName" placeholder="mr. farhan ap">
+                    <input type="text" name="legalName" placeholder="mr. farhan ap" required>
                 </div>
                 <div class="inputBox">
                     <span>credit card number :</span>
-                    <input type="number" name="ccNumber" placeholder="1111-2222-3333-4444">
+                    <input type="number" name="ccNumber" placeholder="1111-2222-3333-4444" required>
                 </div>
                 <div class="inputBox">
                     <span>expired month :</span>
-                    <input type="text" name="expMonth" placeholder="january">
+                    <input type="text" name="expMonth" placeholder="january" required>
                 </div>
 
                 <div class="flex">
                     <div class="inputBox">
                         <span>expired year :</span>
-                        <input type="number" name="expYear" placeholder="2022">
+                        <input type="number" name="expYear" placeholder="2022" required>
                     </div>
                     <div class="inputBox">
                         <span>CVV :</span>
-                        <input type="text" name="cvv" placeholder="1234">
+                        <input type="text" name="cvv" placeholder="1234" required>
                     </div>
                 </div>
 
