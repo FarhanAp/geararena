@@ -653,3 +653,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
     // }
 
 }
+
+// handle user page
+function loadUserData() {
+    $con = opencon();
+    $user_id = $_SESSION["id"];
+    $user_name = $_SESSION["username"];
+    $user_type = $_SESSION["type"];
+
+    $sql = "SELECT * FROM users WHERE id = '$user_id'";
+    $query = mysqli_query($con, $sql);
+    $data = mysqli_fetch_assoc($query);
+    $email = $data["email"];
+    $date = date("Y M jS", strtotime($data["date"]));
+
+    mysqli_free_result($query);
+
+    if ($user_type== 0) {
+        $user_type = "User";
+    } else {
+        $user_type = "Admin";
+    }
+
+    echo "
+        <span class=\"bg-secondary p-1 px-4 rounded text-white\">$user_type</span>
+        <h5 class=\"mt-2 mb-0\">$user_name</h5>
+        <span>$email</span>
+        
+        <div class=\"px-4 mt-1\">
+            <p class=\"fonts\">$date</p>
+        </div>";
+}
