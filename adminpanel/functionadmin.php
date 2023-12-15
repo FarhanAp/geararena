@@ -507,3 +507,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["deletePro"])) {
         </script>";  
     }
 }
+
+// order list
+function loadOrderList() {
+    $con = opencon();
+    $count = 1;
+
+    $sql = "SELECT o.*, oi.*, p.product, u.username FROM orders o 
+    INNER JOIN order_items oi ON o.order_id = oi.order_id
+    INNER JOIN products p ON oi.product_id = p.id
+    INNER JOIN users u ON p.users_id = u.id
+    ORDER BY o.order_id DESC";
+
+    $query = mysqli_query($con, $sql);
+    while ($dataTest = mysqli_fetch_assoc($query)) {
+        $buyer = $dataTest['legal_name'];
+        $product = $dataTest['product'];
+        $quantity = $dataTest['quantity'];
+        $invoiceid = $dataTest['order_id'];
+        $total = $dataTest['total'];
+        $state = $dataTest['state'];
+        $city = $dataTest['city'];
+        $address = $dataTest['address'];
+        $postCode = $dataTest['post_code'];
+        $payDate = date("Y M jS H:i:s", strtotime($dataTest["created_at"]));
+        $price = $dataTest['single_price'];
+
+            echo "
+                <tr>
+                    <th scope=\"row\">$count</th>
+                    <td>$buyer</td>
+                    <td>$product</td>
+                    <td>$price</td>
+                    <td>$quantity</td>
+                    <td>$total</td>
+                    <td>$state</td>
+                    <td>$city</td>
+                    <td>$address</td>
+                    <td>$postCode</td>
+                    <td>$payDate</td>
+                    <td><a href=\"/geararena/orderpage.php?orderid=$invoiceid\">$invoiceid</a></td>
+                </tr>";
+        $count += 1;
+        }  
+}

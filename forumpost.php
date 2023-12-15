@@ -18,24 +18,38 @@
     <link rel="stylesheet" 
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <link rel="stylesheet" href="forumpost.css">
+    <link rel="stylesheet" type="text/css" href="forumpost.css">
 </head>
 <body>
 
     <section id="header">
         <a href="#"><img src="images/GEAR_ARENA_v2_80x80.png" class="logo"alt=""></a>
-        <div>
-            <ul id="navbar">
+        <div class="navbar-nav">
+            <ul id="navbar" class="nav-item">
+                <?php if(is_admin()):?>
+                <li><a href="/geararena/adminpanel/index.php">Admin</a></li>
+                <?php endif;?>
                 <li><a href="marketplace.php">Home</a></li>
                 <li><a href="shop.php">Shop</a></li>
                 <li><a class="active" href="forum.php">Forum</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="contact.php">Contact</a></li>
                 <li><a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
                 <?php if(logged_in()):?>
-                <form action="function.php" method="post">
-                    <li><button type="submit" name="logout" class="btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button></li>
-                </form>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#"> 
+                        More
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="user.php" style="color: #0d6efd;"><i class="fa-solid fa-bag-shopping"> my order</i></a></li>
+                        
+                        <form action="function.php" method="post">
+                            <li><button type="submit" name="logout" class="btn dropdown-item" style="color: #dc3545;"><i class="fa-solid fa-arrow-right-from-bracket"> logout</i></button></li>
+                        </form>
+                    </ul>
+                </li>
+                
                 <?php else:?>
                 <li><a href="login.php"><i class="fa-regular fa-user"></i></a></li>
                 <?php endif;?>

@@ -81,6 +81,14 @@ function logged_in(){
     return false;
 }
 
+// find out if its an admin or not
+function is_admin(){
+    if (isset($_SESSION["id"]) && $_SESSION["type"] == 1) {
+        return true;
+    }
+    return false;
+}
+
 // handle log out
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["logout"])) {
 
@@ -209,8 +217,16 @@ function loadPost(){
 
     if (mysqli_num_rows($query) > 0) {
         echo"
-            <p>$title</p>
-            <p>$body</P>
+        <div class=\"container mb-3\">   
+            <div class=\"card\">
+                <div class=\"card-header text-center fw-bolder\">
+                    <p>$title</p>
+                </div>
+                <div class=\"card-body text-center\">
+                    <p>$body</P>
+                </div>
+            </div>
+        </div>
         ";
     }
 }
@@ -218,7 +234,6 @@ function loadPost(){
 // handle load the comment in forumpost
 function loadComment($id)  {
     $con = opencon();
-    // $sql = "SELECT * FROM forum_comments WHERE post_id='$id'";
     $sql = "SELECT users.id AS userid,
             forum_comments.id,
             username,
@@ -237,11 +252,11 @@ function loadComment($id)  {
 
             if (logged_in()) {
                 if ($_SESSION["type"] == 1) {
-                    echo"<section class=\"comment-container\">
+                    echo"<section class=\"container\">
                             <div class=\"reply-box border p-2 mb-2\">
                                 <h5 class=\"border-bottom\">$name</h5>
                                 <h6 class=\"mb-3\">$date</h6>
-                                <p>$txt</p>
+                                <p class=\"allow-quote\">$txt</p>
                                     <div class=\"action-button\">
                                         <button name=\"edit\" type=\"submit\" class=\"btn btn-outline-primary\" onclick=\"document.location='editcomment.php?commid=$commid'\">
                                         edit
@@ -256,7 +271,7 @@ function loadComment($id)  {
                         </section> ";
                 }
                 elseif ($_SESSION["id"] == $data["userid"]) {
-                    echo"<section class=\"comment-container\">
+                    echo"<section class=\"container\">
                             <div class=\"reply-box border p-2 mb-2\">
                                 <h5 class=\"border-bottom\">$name</h5>
                                 <h6 class=\"mb-3\">$date</h6>
@@ -274,7 +289,7 @@ function loadComment($id)  {
                             </div>
                         </section> ";
                 } else {
-                    echo "<section class=\"comment-container\">
+                    echo "<section class=\"container\">
                     <div class=\"reply-box border p-2 mb-2\">
                         <h5 class=\"border-bottom\">
                         $name
@@ -288,7 +303,7 @@ function loadComment($id)  {
                 </section>";
                 }
             } else {
-                echo "<section class=\"comment-container\">
+                echo "<section class=\"container\">
                     <div class=\"reply-box border p-2 mb-2\">
                         <h5 class=\"border-bottom\">
                         $name
@@ -394,16 +409,17 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["delete_comment"])) {
 // handle create comment box
 function createCommentBox($id) {
     echo "
-    <form action=\"function.php\" method=\"post\">
-        <div class=\"comment-box\" >
-            <textarea id=\"comment\" placeholder=\"Whats on your mind?\" name=\"comment\" class=\"class_44\"></textarea>
-                <button name=\"commenting\" class=\"btn btn-outline-primary\">
-                    Comment
-                </button>
-            <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
-        </div>
-    </form>
-";
+    <div class=\"container\">
+        <form action=\"function.php\" method=\"post\">
+            <div class=\"comment-box\" >
+                <textarea id=\"comment\" placeholder=\"Whats on your mind?\" name=\"comment\" class=\"class_44\"></textarea>
+                    <button name=\"commenting\" class=\"btn btn-outline-primary\">
+                        Comment
+                    </button>
+                <input type=\"hidden\" name=\"postid\" value=\"$id\"/>
+            </div>
+        </form>
+    </div>";
 }
 
 // handle insert comment on post page
@@ -634,24 +650,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["payment"])) {
             }
         }
     }
-
-    // for ($i=0; $i < count($_POST["idpro"]); $i++) { 
-    //     $productId = $_POST["idpro"][$i];
-    //     $productName = $_POST["product"][$i];
-    //     $quantity = $_POST["quantity"][$i];
-    //     $price = $_POST["price"][$i];
-        
-    //     echo "<pre>";
-    //     print_r ($productId); 
-    //     echo "<br>";
-    //     print_r ($productName);
-    //     echo "<br>";
-    //     print_r ($quantity); 
-    //     echo "<br>";
-    //     print_r ($price);
-    //     echo "</pre>";
-    // }
-
 }
 
 // handle user page

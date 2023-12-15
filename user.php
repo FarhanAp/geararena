@@ -36,9 +36,57 @@
         }
         mysqli_data_seek($query, 0);
         mysqli_free_result ($query);
+
     }  elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["mypost"])) {
-        $sql = "";
-    } 
+        $id = array();
+        $title = array();
+        $body = array();
+        $inserted_at = array();
+
+        $sql = "SELECT * FROM forum_posts
+        WHERE user_id = '$user_id'";
+
+        $query = mysqli_query($connect, $sql);
+
+        while ($dataTest = mysqli_fetch_assoc($query)) {
+            array_push($id, $dataTest['id']);
+            array_push($title, $dataTest['title']);
+            array_push($body, htmlspecialchars_decode($dataTest['body']));
+            array_push($inserted_at, date("Y M jS", strtotime($dataTest["inserted_at"])));
+
+            // echo "<pre>";
+            // print_r($dataTest);
+            // echo "</pre>";
+        }
+
+        mysqli_data_seek($query, 0);
+        mysqli_free_result ($query);
+
+    } elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET["mycomment"])) {
+
+        
+        $postId = array();
+        $postName = array();
+        $text = array();
+        $inserted_at = array();
+
+        $sql = "SELECT fc.*, fp.title, fp.id FROM forum_comments fc
+        INNER JOIN forum_posts fp ON fc.post_id = fp.id
+        WHERE fc.user_id = '$user_id'";
+
+        $query = mysqli_query($connect, $sql);
+
+        while ($dataTest = mysqli_fetch_assoc($query)) {
+            array_push($postId, $dataTest['id']);
+            array_push($postName, $dataTest['title']);
+            array_push($text, htmlspecialchars_decode($dataTest['text']));
+            array_push($inserted_at, date("Y M jS", strtotime($dataTest["inserted_at"])));
+
+            // echo "<pre>";
+            // print_r($dataTest);
+            // echo "</pre>";
+        }
+    }
     
 ?>
 
@@ -61,8 +109,8 @@
                 <li><a href="marketplace.php">Home</a></li>
                 <li><a href="shop.php">Shop</a></li>
                 <li><a href="forum.php">Forum</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="contact.php">Contact</a></li>
                 <li><a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
                 <?php if(logged_in()):?>
                 <li class="nav-item dropdown">
@@ -87,12 +135,9 @@
     </section>
 
     <div class="container-fluid mt-5">
-    
         <div class="row d-flex justify-content-center">
-
             <div class="col-md-7">
-                <div class="card p-3 py-4">
-            
+                <div class="card p-3 py-4">           
                     <div class="text-center mt-3">
                         <?= loadUserData() ?>
                         
@@ -114,6 +159,7 @@
                                     <th scope="col">Total</th>
                                     <th scope="col">Date</th>
                                     <th scope="col">Invoice No</th>
+                                    
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -126,18 +172,57 @@
                                             <td><?= $seller[$i] ?></td>
                                             <td><?= $total[$i] ?></td>
                                             <td><?= $payDate[$i] ?></td>
-                                            <td><?= $invoiceid[$i] ?></td>
+                                            <td><a href="orderpage.php?orderid=<?=$invoiceid[$i]?>"><?= $invoiceid[$i] ?></a></td>
+                                        </tr>
+                                        <?php $count += 1?>
+                                    <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        <?php elseif (isset($_GET["mypost"])): ?>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">body</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php for ($i=0; $i < count($title); $i++) : ?>
+                                        <tr>
+                                            <th scope="row"><?= $count ?></th>
+                                            <td ><a href="forumpost.php?postid=<?= $id[$i] ?>"><?= $title[$i] ?></a></td>
+                                            <td ><?= $body[$i] ?></td>
+                                            <td><?= $inserted_at[$i] ?></td>
+                                        </tr>
+                                        <?php $count += 1?>
+                                    <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        <?php elseif (isset($_GET["mycomment"])): ?>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Post</th>
+                                        <th scope="col">Comment</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <?php for ($i=0; $i < count($postName); $i++) : ?>
+                                        <tr class="col-2 ">
+                                            <th scope="row"><?= $count ?></th>
+                                            <td><a href="forumpost.php?postid=<?= $postId[$i] ?>"><?= $postName[$i] ?></a></td>
+                                            <td><?= $text[$i] ?></td>
+                                            <td><?= $inserted_at[$i] ?></td>
                                         </tr>
                                         <?php $count += 1?>
                                     <?php endfor; ?>
                                 </tbody>
                             </table>
                         <?php endif; ?>
-                        
-                        <!-- <div class="buttons">
-                            <button class="btn btn-outline-primary px-4">Message</button>
-                            <button class="btn btn-primary px-4 ms-3">Contact</button>
-                        </div>           -->
                     </div>    
                 </div>         
             </div>      

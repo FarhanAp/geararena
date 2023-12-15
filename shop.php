@@ -34,11 +34,14 @@
         <a href="#"><img src="images/GEAR_ARENA_v2_80x80.png" class="logo"alt=""></a>
         <div class="navbar-nav">
             <ul id="navbar" class="nav-item">
+                <?php if(is_admin()):?>
+                <li><a href="/geararena/adminpanel/index.php">Admin</a></li>
+                <?php endif;?>
                 <li><a href="marketplace.php">Home</a></li>
-                <li><a href="shop.php">Shop</a></li>
+                <li><a class="active" href="shop.php">Shop</a></li>
                 <li><a href="forum.php">Forum</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="contact.php">Contact</a></li>
                 <li><a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a></li>
                 <?php if(logged_in()):?>
                 <li class="nav-item dropdown">

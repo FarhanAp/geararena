@@ -26,6 +26,7 @@
     </section>
 
     <section class="container mt-5">
+        <h4>List Product Category</h4>
         <table class="table table-striped">
             <thead class="table-dark text-center">
                 <tr>
@@ -39,5 +40,31 @@
             </tbody>
         </table>
     </section>
+    
+    <section class="container mt-5">
+        <h4>Orders From Buyers</h4>
+        <table class="table table-striped">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Buyer</th>
+                    <th scope="col">Products</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">State</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Post Code</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Invoice No</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?= loadOrderList() ?>   
+            </tbody>
+        </table>
+    </section>
+
 </body>
 </html>
