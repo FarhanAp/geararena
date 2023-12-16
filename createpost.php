@@ -35,19 +35,22 @@
             </ul>
         </div>
     </section>
-    <h1>CREATE YOUR POST</h1>
+    
+    <div class="container">
+        <h1>CREATE YOUR POST</h1>
+        <!-- posting in here title & body of comment -->
+        <?php loadForumCreatePost() ?>
+        <!-- <form action="function.php" method="post">
+            <section class="post-box" >
+                <input type="text" name="title" placeholder="title in here">
+                <textarea id="postin" placeholder="Whats on your mind?" name="postin" class="class_44"></textarea>
+                <button class="class_46" name="posting">
+                    Post
+                </button>
+            </section>
+        </form> -->
 
-    <!-- posting in here title & body of comment -->
-    <?php loadForumCreatePost() ?>
-    <!-- <form action="function.php" method="post">
-        <section class="post-box" >
-            <input type="text" name="title" placeholder="title in here">
-            <textarea id="postin" placeholder="Whats on your mind?" name="postin" class="class_44"></textarea>
-            <button class="class_46" name="posting">
-                Post
-            </button>
-        </section>
-    </form> -->
+    </div>
 
 
     <!-- using a wysiwyg editor the name is ckeditor -->

@@ -36,13 +36,11 @@
         </div>
     </section>
 
-    <?php editComment($_GET["commid"]) ?>
-    <h1>EDIT COMMENT</h1>
-
-    <p>hello</p>
-    <br>
-    <p>$_GET["commid"]</p>
-
+    <div class="container">
+        <h1>EDIT COMMENT</h1>
+        <?php editComment($_GET["commid"]) ?>
+    </div>
+ 
 
     <!-- using a wysiwyg editor the name is ckeditor -->
     <script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>

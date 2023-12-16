@@ -247,8 +247,8 @@ function loadComment($id)  {
         while (($data = mysqli_fetch_assoc($query)) != null) {
             $name = $data["username"];
             $date = $data["inserted_at"];
-            $txt = htmlspecialchars_decode($data["text"]);
             $commid = $data["id"];
+            $txt = htmlspecialchars_decode($data["text"]);
 
             if (logged_in()) {
                 if ($_SESSION["type"] == 1) {
@@ -275,7 +275,8 @@ function loadComment($id)  {
                             <div class=\"reply-box border p-2 mb-2\">
                                 <h5 class=\"border-bottom\">$name</h5>
                                 <h6 class=\"mb-3\">$date</h6>
-                                <p>$txt</p>
+                                
+                                <p style=\"padding-left: 10px;\"> $txt</p>
                                     <div class=\"action-button\">
                                         <button name=\"edit\" type=\"submit\" class=\"btn btn-outline-primary\" onclick=\"document.location='editcomment.php?commid=$commid'\">
                                         edit
