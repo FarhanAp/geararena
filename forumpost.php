@@ -57,8 +57,9 @@
         </div>
     </section>
 
+    <div class="container mt-2">
     <?php loadPost() ?>
-
+    </div>
     <!-- <button data-open-modal>Open</button>
     
     <dialog data-modal>
@@ -121,7 +122,9 @@
             </div>
         </form> -->
     <?php else:?>
-        <p>login or register to be able to comment</p>
+        <div class="container">
+            <p><Strong>login or register to be able to comment</Strong></p>
+        </div>
     <?php endif;?>
 
     <!-- using a wysiwyg editor the name is ckeditor -->

@@ -60,7 +60,9 @@
     <?php if (logged_in()):?>
         <?php postCreation()?>
     <?php else:?>
-        <p>login or register to be able to post</p>
+        <div class="container">
+            <p class="text-center"><Strong>login or register to be able to post</Strong></p>
+        </div>
     <?php endif;?>
     <!-- <div class="floating-parent">
         <div class="float-text"> <a style="text-decoration:none" href="createpost.php?cid=1">create a post</a></div>
@@ -76,8 +78,6 @@
             </tr>
             <tr>
                 <?php loadForumPostList()?>
-                <!-- <td>X</td>
-                <td>XX</td> -->
             </tr>
         </table>
     </div>
