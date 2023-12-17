@@ -34,9 +34,9 @@
             );
             $_SESSION['cart'][] = $session_array;
         }
-        echo "<pre>";
-        print_r($_SESSION);
-        echo "</pre>";
+        // echo "<pre>";
+        // print_r($_SESSION);
+        // echo "</pre>";
     }
 
     if (isset($_GET['action'])) {

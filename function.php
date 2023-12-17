@@ -144,7 +144,7 @@ function loadForumPostList(){
         }
     } else {
         // echo "<script>alert('no post found in this category')</script>";
-        echo "<h1>no post found in this category</h1>";   
+        echo "<td colspan=\"3\"><h3>  no post found in this category</h3> </td>";   
     }
 }
 
@@ -173,7 +173,7 @@ function loadForumCreatePost(){
         <section class=\"post-box\" >
             <input type=\"text\" name=\"title\" placeholder=\"title in here\">
             <textarea id=\"postin\" placeholder=\"Whats on your mind?\" name=\"postin\" class=\"class_44\"></textarea>
-            <button name=\"posting\">
+            <button class=\"btn btn-outline-info mt-2\" name=\"posting\">
                 Post
             </button>
             <input type=\"hidden\" name=\"caId\" value=\"$cid\"/>
@@ -240,7 +240,7 @@ function loadComment($id)  {
             text,
             inserted_at
             FROM forum_comments INNER JOIN users ON forum_comments.user_id = users.id 
-            WHERE forum_comments.post_id='$id'";
+            WHERE forum_comments.post_id='$id' ORDER BY forum_comments.id ASC";
     $query = mysqli_query($con, $sql);
 
     if ( mysqli_num_rows($query) > 0) {
@@ -414,7 +414,7 @@ function createCommentBox($id) {
         <form action=\"function.php\" method=\"post\">
             <div class=\"comment-box\" >
                 <textarea id=\"comment\" placeholder=\"Whats on your mind?\" name=\"comment\" class=\"class_44\"></textarea>
-                    <button name=\"commenting\" class=\"btn btn-outline-primary\">
+                    <button name=\"commenting\" class=\"btn btn-outline-primary mt-1\">
                         Comment
                     </button>
                 <input type=\"hidden\" name=\"postid\" value=\"$id\"/>

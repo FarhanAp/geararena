@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="assets/css/forumcategory.css">
 </head>
 <body>
-    <h2>category</h2>
     <?php categoryForumCreation()?>
-
+    
     <div class="container">
+        <h2>category</h2>
         <table class="table table-bordered text-center">
             <tr class="table-success">
                 <th>ID</th>
